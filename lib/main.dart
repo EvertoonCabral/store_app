@@ -15,7 +15,7 @@ class PerfumeStoreApp extends StatelessWidget {
     return MaterialApp(
       title: 'Perfume Store',
       theme: AppTheme.light, // opcional
-      initialRoute: '/',
+      initialRoute: '/login',
       routes: AppRoutes.routes,
     );
   }
