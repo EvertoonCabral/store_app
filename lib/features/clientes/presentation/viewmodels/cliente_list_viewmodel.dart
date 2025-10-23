@@ -4,10 +4,10 @@ import 'package:store_app/features/clientes/data/models/cliente_filtro_dto.dart'
 import 'package:store_app/features/clientes/data/models/paged_result.dart';
 import 'package:store_app/features/clientes/data/repositories/cliente_repository.dart';
 
-class ClienteListViewmodel extends ChangeNotifier {
+class ClienteListViewModel extends ChangeNotifier {
   final ClientesRepository repository;
 
-  ClienteListViewmodel(this.repository);
+  ClienteListViewModel(this.repository);
 
   bool isLoading = false;
   String? error;

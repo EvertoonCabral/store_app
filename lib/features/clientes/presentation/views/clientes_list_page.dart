@@ -15,12 +15,14 @@ class _ClientesListPageState extends State<ClientesListPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => context.read<ClienteListViewmodel>().fetch());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ClienteListViewModel>().fetch();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<ClienteListViewmodel>();
+    final vm = context.watch<ClienteListViewModel>();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Clientes')),
