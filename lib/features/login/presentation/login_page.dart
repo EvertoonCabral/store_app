@@ -9,13 +9,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _emailCtrl = TextEditingController();
-  final _senhaCtrl = TextEditingController();
+  final _emailController = TextEditingController();
+  final _senhaController = TextEditingController();
 
   @override
   void dispose() {
-    _emailCtrl.dispose();
-    _senhaCtrl.dispose();
+    _emailController.dispose();
+    _senhaController.dispose();
     super.dispose();
   }
 
@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(6),
                   child: Image.asset(
-                    'assets/images/Logo_WhiteMode.png',
+                    'assets/images/logo_white_mode.png',
                     width: 100,
                     height: 100,
                     fit: BoxFit.contain,
@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                 // TÍTULO COM POPPINS
                 Text(
                   'PerfumeStore',
-                  style: GoogleFonts.poppins(
+                  style: GoogleFonts.agdasima(
                     fontSize: 28,
                     fontWeight: FontWeight.w600,
                     color: purple,
@@ -55,9 +55,8 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 24),
 
-                // EMAIL (INTER)
                 TextFormField(
-                  controller: _emailCtrl,
+                  controller: _emailController,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
                       fontSize: 14, fontWeight: FontWeight.w400),
@@ -81,9 +80,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 12),
 
-                // SENHA (INTER)
                 TextFormField(
-                  controller: _senhaCtrl,
+                  controller: _senhaController,
                   obscureText: true,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
@@ -109,7 +107,9 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 16),
 
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed('/home');
+                  },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepPurple,
                       minimumSize: const Size(double.infinity, 50)),

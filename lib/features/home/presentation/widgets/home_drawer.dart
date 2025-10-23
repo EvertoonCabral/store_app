@@ -48,6 +48,11 @@ class HomeDrawer extends StatelessWidget {
               title: const Text('Clientes'),
               onTap: () => Navigator.pushReplacementNamed(context, '/clientes'),
             ),
+            ListTile(
+              leading: const Icon(Icons.exit_to_app),
+              title: const Text('Sair'),
+              onTap: () => Navigator.pushReplacementNamed(context, '/login'),
+            ),
           ],
         ),
       ),
