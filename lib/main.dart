@@ -11,7 +11,7 @@ import 'core/config/app_theme.dart';
 
 void main() {
   final httpClient = HttpClient(
-      baseUrl: 'http://10.0.2.2:5000',
+      baseUrl: 'https://burghal-klara-nonextraneously.ngrok-free.dev/',
       client: http.Client()); // ajuste para sua API
   final api = ClienteApiService(httpClient);
   final repo = ClientesRepositoryImpl(api);

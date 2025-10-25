@@ -10,7 +10,7 @@ class ClienteApiService {
 
   Future<PagedResult<ClienteDto>> getClientes(ClienteFiltroDto filtros) async {
     final result = await client.get(
-      'api/clientes',
+      'api/Cliente',
       query: filtros.toQuery(),
     );
     final data = client.decode(result) as Map<String, dynamic>;

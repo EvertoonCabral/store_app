@@ -22,16 +22,24 @@ class _ClientesListPageState extends State<ClientesListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<ClienteListViewModel>();
+    final viewModel = context.watch<ClienteListViewModel>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Clientes')),
+      appBar: AppBar(
+        title: const Text('Clientes'),
+        actions: [
+          IconButton(
+              onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
+              icon: Icon(Icons.arrow_back_ios_outlined))
+        ],
+      ),
       body: Builder(builder: (_) {
-        if (vm.isLoading)
+        if (viewModel.isLoading)
           return const Center(child: CircularProgressIndicator());
-        if (vm.error != null) return Center(child: Text(vm.error!));
+        if (viewModel.error != null)
+          return Center(child: Text(viewModel.error!));
 
-        final items = vm.page?.items ?? <ClienteDto>[];
+        final items = viewModel.page?.items ?? <ClienteDto>[];
         if (items.isEmpty)
           return const Center(child: Text('Nenhum cliente encontrado'));
 
