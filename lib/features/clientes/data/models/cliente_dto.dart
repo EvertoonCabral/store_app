@@ -20,6 +20,7 @@ class ClienteDto {
   factory ClienteDto.fromJson(Map<String, dynamic> json) => ClienteDto(
         id: json['id'] as int,
         nome: json['nome'] as String,
+        cpf: json['cpf'] as String,
         telefone: json['telefone'] as String,
         email: json['email'] as String,
         isAtivo: json['isAtivo'] as bool,

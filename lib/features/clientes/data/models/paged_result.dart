@@ -1,6 +1,6 @@
 class PagedResult<T> {
   final List<T> items;
-  final int totalItems;
+  final int? totalItems;
   final int pageNumber;
   final int pageSize;
   final int totalPages;
@@ -20,7 +20,7 @@ class PagedResult<T> {
     final itemsJson = (json['items'] as List).cast<Map<String, dynamic>>();
     return PagedResult(
       items: itemsJson.map(fromJsonT).toList(),
-      totalItems: json['totalItems'] as int,
+      totalItems: json['totalCount'] as int,
       pageNumber: json['pageNumber'] as int,
       pageSize: json['pageSize'] as int,
       totalPages: json['totalPages'] as int,
