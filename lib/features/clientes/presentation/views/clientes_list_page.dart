@@ -67,10 +67,7 @@ class _ClientesListPageState extends State<ClientesListPage> {
       }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navegar para tela de criação (implementará depois)
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Ir para novo cliente')),
-          );
+          Navigator.of(context).pushReplacementNamed('/cadastrar-cliente');
         },
         child: const Icon(Icons.add),
       ),

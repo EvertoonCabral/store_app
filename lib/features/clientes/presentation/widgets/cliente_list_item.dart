@@ -29,7 +29,12 @@ class ClienteListItem extends StatelessWidget {
         trailing: Wrap(
           spacing: 8,
           children: [
-            IconButton(icon: const Icon(Icons.edit), onPressed: onEdit),
+            IconButton(
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                Navigator.of(context).pushReplacementNamed('/editar-cliente');
+              },
+            ),
             IconButton(
                 icon: const Icon(Icons.delete, color: Colors.red),
                 onPressed: onDelete),
