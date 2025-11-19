@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:store_app/features/clientes/presentation/viewmodels/cliente_list_viewmodel.dart';
+import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
 import '../widgets/cliente_list_item.dart';
 import '../../data/models/cliente_dto.dart';
 
