@@ -9,12 +9,27 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
   ProdutoRepositoryImpl(this.api);
 
   @override
-  Future<bool> postProdutos(ProdutoEntity request) {
-    throw UnimplementedError();
+  Future<bool> postProdutos(ProdutoEntity request) async {
+    try {
+      await api.createProduto(request.toMap());
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   @override
   Future<List<ProdutoEntity>> getProdutos() {
     return api.getAllProdutos();
+  }
+
+  @override
+  Future<ProdutoEntity> getProdutoById(int id) {
+    return api.getProdutoById(id);
+  }
+
+  @override
+  Future<bool> deleteProduto(int id) {
+    return api.deleteProduto(id);
   }
 }

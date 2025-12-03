@@ -56,7 +56,6 @@ class ProdutoEntity {
       'precoVenda': precoVenda,
       'descricao': descricao,
       'isAtivo': isAtivo,
-      // ISO 8601 (compatível com DateTime do .NET e JSON padrão)
       'dataCadastro': dataCadastro.toIso8601String(),
       'estoqueId': estoqueId,
     };

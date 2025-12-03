@@ -17,4 +17,29 @@ class ProdutoApiServices {
 
     return produtos;
   }
+
+  Future<ProdutoEntity> getProdutoById(int id) async {
+    final result = await client.get('api/Produto/$id');
+
+    final data = client.decode(result) as Map<String, dynamic>;
+
+    return ProdutoEntity.fromMap(data);
+  }
+
+  Future<ProdutoEntity> createProduto(Map<String, dynamic> produtoData) async {
+    final result = await client.post('api/Produto', body: produtoData);
+
+    final data = client.decode(result) as Map<String, dynamic>;
+
+    return ProdutoEntity.fromMap(data);
+  }
+
+  Future<bool> deleteProduto(int id) async {
+    try {
+      await client.delete('api/Produto/$id');
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
 }

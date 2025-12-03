@@ -29,19 +29,26 @@ class _ClientesListPageState extends State<ClientesListPage> {
         title: const Text('Clientes'),
         actions: [
           IconButton(
-              onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
-              icon: Icon(Icons.arrow_back_ios_outlined))
+            onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
+            icon: Icon(Icons.arrow_back_ios_outlined),
+          )
         ],
       ),
       body: Builder(builder: (_) {
         if (viewModel.isLoading)
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
         if (viewModel.error != null)
-          return Center(child: Text(viewModel.error!));
+          return Center(
+            child: Text(viewModel.error!),
+          );
 
         final items = viewModel.page?.items ?? <ClienteDto>[];
         if (items.isEmpty)
-          return const Center(child: Text('Nenhum cliente encontrado'));
+          return const Center(
+            child: Text('Nenhum cliente encontrado'),
+          );
 
         return ListView.builder(
           itemCount: items.length,
@@ -50,13 +57,11 @@ class _ClientesListPageState extends State<ClientesListPage> {
             return ClienteListItem(
               cliente: c,
               onEdit: () {
-                // Navegação para tela de edição (implementará depois)
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Editar: ${c.nome}')),
                 );
               },
               onDelete: () {
-                // Confirmação/exclusão será implementada depois
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Excluir: ${c.nome}')),
                 );

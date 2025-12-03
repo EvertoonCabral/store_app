@@ -26,6 +26,31 @@ class HttpClient {
     return result;
   }
 
+  Future<http.Response> post(String path, {Map<String, dynamic>? body}) async {
+    final result = await _client.post(
+      _uri(path),
+      headers: {'Content-type': 'application/json'},
+      body: jsonEncode(body),
+    );
+    if (result.statusCode != 200 && result.statusCode != 201) {
+      throw Exception(
+          'POST $path falhou (${result.statusCode}): ${result.body}');
+    }
+    return result;
+  }
+
+  Future<http.Response> delete(String path) async {
+    final result = await _client.delete(
+      _uri(path),
+      headers: {'Content-type': 'application/json'},
+    );
+    if (result.statusCode != 200 && result.statusCode != 204) {
+      throw Exception(
+          'DELETE $path falhou (${result.statusCode}): ${result.body}');
+    }
+    return result;
+  }
+
   dynamic decode(http.Response res) {
     if (res.body.isEmpty) return null;
     return jsonDecode(utf8.decode(res.bodyBytes));
