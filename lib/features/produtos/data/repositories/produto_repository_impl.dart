@@ -19,6 +19,16 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
   }
 
   @override
+  Future<bool> updateProduto(int id, ProdutoEntity request) async {
+    try {
+      await api.updateProduto(id, request.toMap());
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  @override
   Future<List<ProdutoEntity>> getProdutos() {
     return api.getAllProdutos();
   }

@@ -39,6 +39,19 @@ class HttpClient {
     return result;
   }
 
+  Future<http.Response> put(String path, {Map<String, dynamic>? body}) async {
+    final result = await _client.put(
+      _uri(path),
+      headers: {'Content-type': 'application/json'},
+      body: jsonEncode(body),
+    );
+    if (result.statusCode != 200 && result.statusCode != 204) {
+      throw Exception(
+          'PUT $path falhou (${result.statusCode}): ${result.body}');
+    }
+    return result;
+  }
+
   Future<http.Response> delete(String path) async {
     final result = await _client.delete(
       _uri(path),

@@ -42,4 +42,13 @@ class ProdutoApiServices {
       return false;
     }
   }
+
+  Future<ProdutoEntity> updateProduto(
+      int id, Map<String, dynamic> produtoData) async {
+    final result = await client.put('api/Produto/$id', body: produtoData);
+
+    final data = client.decode(result) as Map<String, dynamic>;
+
+    return ProdutoEntity.fromMap(data);
+  }
 }

@@ -4,5 +4,6 @@ abstract class ProdutoRepository {
   Future<bool> postProdutos(ProdutoEntity request);
   Future<List<ProdutoEntity>> getProdutos();
   Future<ProdutoEntity> getProdutoById(int id);
+  Future<bool> updateProduto(int id, ProdutoEntity request);
   Future<bool> deleteProduto(int id);
 }
