@@ -13,7 +13,7 @@ class ClienteListViewModel extends ChangeNotifier {
   String? error;
   PagedResult<ClienteDto>? page;
 
-  Future<void> fetch(
+  Future<void> retornaClientes(
       {ClienteFiltroDto filtros = const ClienteFiltroDto()}) async {
     try {
       isLoading = true;

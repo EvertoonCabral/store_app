@@ -77,9 +77,8 @@ class ProdutoEntity {
 
   String toJson() => json.encode(toMap());
 
-  factory ProdutoEntity.fromJson(String source) =>
-      ProdutoEntity.fromMap(json.decode(source) as Map<String, dynamic>);
-
+  factory ProdutoEntity.fromJson(Map<String, dynamic> json) =>
+      ProdutoEntity.fromMap(json);
   @override
   String toString() {
     return 'ProdutoEntity(id: $id, nome: $nome, marca: $marca, precoCompra: $precoCompra, precoVenda: $precoVenda, descricao: $descricao, isAtivo: $isAtivo, dataCadastro: $dataCadastro, estoqueId: $estoqueId)';

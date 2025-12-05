@@ -1,32 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
-import '../widgets/cliente_list_item.dart';
-import '../../data/models/cliente_dto.dart';
+import 'package:store_app/features/produtos/data/models/produto_entity.dart';
+import 'package:store_app/features/produtos/presentation/viewmodel/produto_list_viewmodel.dart';
+import 'package:store_app/features/produtos/presentation/widgets/produto_card_widget.dart';
 
-class ClientesListPage extends StatefulWidget {
-  const ClientesListPage({super.key});
+class ProdutosListPage extends StatefulWidget {
+  const ProdutosListPage({super.key});
 
   @override
-  State<ClientesListPage> createState() => _ClientesListPageState();
+  State<ProdutosListPage> createState() => _ProdutoListPageState();
 }
 
-class _ClientesListPageState extends State<ClientesListPage> {
+class _ProdutoListPageState extends State<ProdutosListPage> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ClienteListViewModel>().retornaClientes();
+      context.read<ProdutoListViewmodel>().retornaProdutos();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<ClienteListViewModel>();
+    final vm = context.watch<ProdutoListViewmodel>();
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Clientes'),
+        title: const Text('Produtos'),
         actions: [
           IconButton(
             onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
@@ -35,38 +35,34 @@ class _ClientesListPageState extends State<ClientesListPage> {
         ],
       ),
       body: Builder(builder: (_) {
-        if (viewModel.isLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+        if (vm.isLoading) {
+          return const Center(child: CircularProgressIndicator());
         }
-        if (viewModel.error != null) {
+        if (vm.error != null) {
           return Center(
-            child: Text(viewModel.error!),
+            child: Text(vm.error!),
           );
         }
-
-        final items = viewModel.page?.items ?? <ClienteDto>[];
+        final items = vm.result?.items ?? <ProdutoEntity>[];
         if (items.isEmpty) {
           return const Center(
-            child: Text('Nenhum cliente encontrado'),
+            child: Text('Nenhum produto encontrado'),
           );
         }
-
         return ListView.builder(
           itemCount: items.length,
           itemBuilder: (_, i) {
-            final c = items[i];
-            return ClienteListItem(
-              cliente: c,
+            final p = items[i];
+            return ProdutoCardWidget(
+              produto: p,
               onEdit: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Editar: ${c.nome}')),
+                  SnackBar(content: Text('Editar: ${p.nome}')),
                 );
               },
               onDelete: () {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Excluir: ${c.nome}')),
+                  SnackBar(content: Text('Excluir: ${p.nome}')),
                 );
               },
             );

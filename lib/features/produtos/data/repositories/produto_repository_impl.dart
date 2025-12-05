@@ -1,3 +1,4 @@
+import 'package:store_app/features/clientes/data/models/paged_result.dart';
 import 'package:store_app/features/produtos/data/models/produto_entity.dart';
 import 'package:store_app/features/produtos/data/services/produto_api_services.dart';
 
@@ -29,7 +30,7 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
   }
 
   @override
-  Future<List<ProdutoEntity>> getProdutos() {
+  Future<PagedResult<ProdutoEntity>> getProdutos() {
     return api.getAllProdutos();
   }
 
