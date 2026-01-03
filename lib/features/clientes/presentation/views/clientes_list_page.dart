@@ -34,45 +34,45 @@ class _ClientesListPageState extends State<ClientesListPage> {
           )
         ],
       ),
-      body: Builder(builder: (_) {
-        if (viewModel.isLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        if (viewModel.error != null) {
-          return Center(
-            child: Text(viewModel.error!),
-          );
-        }
-
-        final items = viewModel.page?.items ?? <ClienteDto>[];
-        if (items.isEmpty) {
-          return const Center(
-            child: Text('Nenhum cliente encontrado'),
-          );
-        }
-
-        return ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (_, i) {
-            final c = items[i];
-            return ClienteListItem(
-              cliente: c,
-              onEdit: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Editar: ${c.nome}')),
-                );
-              },
-              onDelete: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Excluir: ${c.nome}')),
-                );
-              },
+      body: Builder(
+        builder: (_) {
+          if (viewModel.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
             );
-          },
-        );
-      }),
+          }
+          if (viewModel.error != null) {
+            return Center(
+              child: Text(viewModel.error!),
+            );
+          }
+
+          final items = viewModel.page?.items ?? <ClienteDto>[];
+          if (items.isEmpty) {
+            return const Center(
+              child: Text('Nenhum cliente encontrado'),
+            );
+          }
+
+          return ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (_, i) {
+              final c = items[i];
+              return ClienteListItem(
+                cliente: c,
+                onEdit: () {
+                  Navigator.of(context).pushReplacementNamed('');
+                },
+                onDelete: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Excluir: ${c.nome}')),
+                  );
+                },
+              );
+            },
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).pushReplacementNamed('/cadastrar-cliente');

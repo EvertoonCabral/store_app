@@ -31,9 +31,7 @@ class ProdutoCardWidget extends StatelessWidget {
           children: [
             IconButton(
               icon: const Icon(Icons.edit),
-              onPressed: () {
-                Navigator.of(context).pushReplacementNamed('/home');
-              },
+              onPressed: onEdit,
             ),
             IconButton(
                 icon: const Icon(Icons.delete, color: Colors.red),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:store_app/core/config/app_routes.dart';
 import 'package:store_app/features/produtos/data/models/produto_entity.dart';
 import 'package:store_app/features/produtos/presentation/viewmodel/produto_list_viewmodel.dart';
 import 'package:store_app/features/produtos/presentation/widgets/produto_card_widget.dart';
@@ -30,7 +31,7 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
         actions: [
           IconButton(
             onPressed: () => Navigator.pushReplacementNamed(context, '/home'),
-            icon: Icon(Icons.arrow_back_ios_outlined),
+            icon: const Icon(Icons.arrow_back_ios_outlined),
           )
         ],
       ),
@@ -55,14 +56,47 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
             final p = items[i];
             return ProdutoCardWidget(
               produto: p,
-              onEdit: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Editar: ${p.nome}')),
+              onEdit: () async {
+                final resultado = await Navigator.pushNamed(
+                  context,
+                  AppRoutes.editarProduto,
+                  arguments: p,
                 );
+
+                if (resultado != null) {
+                  if (mounted) {
+                    // ignore: use_build_context_synchronously
+                    context.read<ProdutoListViewmodel>().retornaProdutos();
+                  }
+                }
               },
               onDelete: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Excluir: ${p.nome}')),
+                showDialog(
+                  context: context,
+                  builder: (dialogContext) => AlertDialog(
+                    title: const Text('Confirmar exclusão'),
+                    content: Text('Deseja realmente excluir "${p.nome}"?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(dialogContext),
+                        child: const Text('Cancelar'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(dialogContext);
+                          // Aqui você chama o método de deletar do viewmodel
+                          // context.read<ProdutoListViewmodel>().deletarProduto(p.id);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('${p.nome} excluído')),
+                          );
+                        },
+                        child: const Text(
+                          'Excluir',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  ),
                 );
               },
             );
@@ -70,8 +104,19 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
         );
       }),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushReplacementNamed('/cadastrar-cliente');
+        onPressed: () async {
+          // Navega para cadastrar produto
+          final resultado = await Navigator.pushNamed(
+            context,
+            AppRoutes.cadastrarProduto,
+          );
+
+          // Se retornou algo (produto criado), recarrega a lista
+          if (resultado != null) {
+            if (mounted) {
+              context.read<ProdutoListViewmodel>().retornaProdutos();
+            }
+          }
         },
         child: const Icon(Icons.add),
       ),
