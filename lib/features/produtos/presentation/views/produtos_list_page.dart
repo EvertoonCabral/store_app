@@ -114,6 +114,7 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
           // Se retornou algo (produto criado), recarrega a lista
           if (resultado != null) {
             if (mounted) {
+              // ignore: use_build_context_synchronously
               context.read<ProdutoListViewmodel>().retornaProdutos();
             }
           }

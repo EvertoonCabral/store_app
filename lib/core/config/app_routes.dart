@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_add_page.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_list_page.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_update_page.dart';
-import 'package:store_app/features/login/presentation/login_page.dart';
+import 'package:store_app/features/login/presentation/view/login_page.dart';
 import 'package:store_app/features/produtos/data/models/produto_entity.dart';
 import 'package:store_app/features/produtos/presentation/views/produto_add_page.dart';
 import 'package:store_app/features/produtos/presentation/views/produto_update_page.dart';

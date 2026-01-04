@@ -31,7 +31,6 @@ class _ProdutoAddPageState extends State<ProdutoAddPage> {
 
   void _salvarProduto() {
     if (_formKey.currentState!.validate()) {
-      // Aqui você pode criar o ProdutoEntity e salvar
       final produto = {
         'nome': _nomeController.text,
         'marca': _marcaController.text,

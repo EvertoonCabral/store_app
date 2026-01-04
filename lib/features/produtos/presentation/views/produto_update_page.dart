@@ -7,8 +7,8 @@ class ProdutoUpdatePage extends StatefulWidget {
 
   const ProdutoUpdatePage({
     super.key,
-    this.produto,
-  },);
+    required this.produto,
+  });
 
   @override
   State<ProdutoUpdatePage> createState() => _ProdutoUpdatePageState();
@@ -54,7 +54,9 @@ class _ProdutoUpdatePageState extends State<ProdutoUpdatePage> {
         marca: _marcaController.text,
         precoCompra: double.parse(_precoCompraController.text),
         precoVenda: double.parse(_precoVendaController.text),
-        descricao: _descricaoController.text.isEmpty ? null : _descricaoController.text,
+        descricao: _descricaoController.text.isEmpty
+            ? null
+            : _descricaoController.text,
         isAtivo: _isAtivo,
         estoqueId: int.parse(_estoqueIdController.text),
       );
@@ -143,7 +145,8 @@ class _ProdutoUpdatePageState extends State<ProdutoUpdatePage> {
               const SizedBox(height: 8),
               TextFormField(
                 controller: _precoCompraController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
@@ -180,7 +183,8 @@ class _ProdutoUpdatePageState extends State<ProdutoUpdatePage> {
               const SizedBox(height: 8),
               TextFormField(
                 controller: _precoVendaController,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],

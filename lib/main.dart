@@ -6,19 +6,43 @@ import 'package:store_app/core/network/http_client.dart';
 import 'package:store_app/features/clientes/data/repositories/cliente_repository_impl.dart';
 import 'package:store_app/features/clientes/data/services/cliente_api_services.dart';
 import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
+import 'package:store_app/features/login/data/repositories/auth_repository_impl.dart';
+import 'package:store_app/features/login/data/service/auth_api_service.dart';
+import 'package:store_app/features/login/presentation/viewmodel/auth_viewmodel.dart';
+import 'package:store_app/features/produtos/data/repositories/produto_repository_impl.dart';
+import 'package:store_app/features/produtos/data/services/produto_api_services.dart';
+import 'package:store_app/features/produtos/presentation/viewmodel/produto_list_viewmodel.dart';
 import 'core/config/app_routes.dart';
 import 'core/config/app_theme.dart';
 
 void main() {
   final httpClient = HttpClient(
-      baseUrl: 'https://burghal-klara-nonextraneously.ngrok-free.dev/',
-      client: http.Client()); // ajuste para sua API
-  final api = ClienteApiService(httpClient);
-  final repo = ClientesRepositoryImpl(api);
+    baseUrl: 'https://burghal-klara-nonextraneously.ngrok-free.dev/',
+    client: http.Client(),
+  );
+
+  final clienteApi = ClienteApiService(httpClient);
+  final clienteRepo = ClientesRepositoryImpl(clienteApi);
+
+  final produtoApi = ProdutoApiServices(httpClient);
+  final produtoRepo = ProdutoRepositoryImpl(produtoApi);
+
+  final authApi = AuthApiService(httpClient);
+  final authRepo = AuthRepositoryImpl(authApi);
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ClienteListViewModel(repo),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ClienteListViewModel(clienteRepo),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ProdutoListViewmodel(produtoRepo),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AuthViewModel(authRepo),
+        ),
+      ],
       child: const PerfumeStoreApp(),
     ),
   );
@@ -31,9 +55,10 @@ class PerfumeStoreApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Perfume Store',
-      theme: AppTheme.light, // opcional
+      theme: AppTheme.light,
       initialRoute: '/login',
       routes: AppRoutes.routes,
+      onGenerateRoute: AppRoutes.onGenerateRoute,
     );
   }
 }
