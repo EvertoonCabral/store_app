@@ -26,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
     if (!_formKey.currentState!.validate()) return;
 
     final authVm = context.read<AuthViewModel>();
-
     final success = await authVm.login(
       _emailController.text.trim(),
       _senhaController.text,
@@ -39,15 +38,12 @@ class _LoginPageState extends State<LoginPage> {
         const SnackBar(
           content: Text('Login realizado com sucesso!'),
           backgroundColor: Colors.green,
-          duration: Duration(seconds: 2),
         ),
       );
-
       await Future.delayed(const Duration(milliseconds: 500));
+      if (!mounted) return;
 
-      if (mounted) {
-        Navigator.of(context).pushReplacementNamed('/home');
-      }
+      Navigator.of(context).pushReplacementNamed('/home');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

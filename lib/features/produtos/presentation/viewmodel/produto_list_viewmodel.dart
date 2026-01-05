@@ -14,6 +14,7 @@ class ProdutoListViewmodel extends ChangeNotifier {
   bool isLoading = false;
   String? error;
   PagedResult<ProdutoEntity>? result;
+  List<ProdutoEntity>? items = [];
 
   Future<void> retornaProdutos() async {
     final token = authViewModel.token;
@@ -28,7 +29,7 @@ class ProdutoListViewmodel extends ChangeNotifier {
       error = null;
       notifyListeners();
 
-      result = await repository.getProdutos(token);
+      items = await repository.getProdutos(token);
     } catch (e) {
       error = 'Erro ao carregar produtos';
     } finally {

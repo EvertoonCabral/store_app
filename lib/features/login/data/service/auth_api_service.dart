@@ -15,7 +15,6 @@ class AuthApiService {
     );
 
     final data = _client.decode(response) as Map<String, dynamic>;
-    print('LOGIN RESPONSE JSON => $data');
     return LoginResponse.fromMap(data);
   }
 }

@@ -44,7 +44,7 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
             child: Text(vm.error!),
           );
         }
-        final items = vm.result?.items ?? <ProdutoEntity>[];
+        final items = vm.items ?? <ProdutoEntity>[];
         if (items.isEmpty) {
           return const Center(
             child: Text('Nenhum produto encontrado'),
