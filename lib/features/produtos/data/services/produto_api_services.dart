@@ -7,8 +7,13 @@ class ProdutoApiServices {
 
   ProdutoApiServices(this.client);
 
-  Future<PagedResult<ProdutoEntity>> getAllProdutos() async {
-    final result = await client.get('api/Produto');
+  Future<PagedResult<ProdutoEntity>> getAllProdutos(String token) async {
+    final result = await client.get(
+      'api/Produto',
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
 
     final data = client.decode(result) as Map<String, dynamic>;
 
@@ -18,25 +23,39 @@ class ProdutoApiServices {
     );
   }
 
-  Future<ProdutoEntity> getProdutoById(int id) async {
-    final result = await client.get('api/Produto/$id');
+  Future<ProdutoEntity> getProdutoById(int id, String token) async {
+    final result = await client
+        .get('api/Produto/$id', headers: {'Authorization': 'Bearer $token'});
 
     final data = client.decode(result) as Map<String, dynamic>;
 
     return ProdutoEntity.fromMap(data);
   }
 
-  Future<ProdutoEntity> createProduto(Map<String, dynamic> produtoData) async {
-    final result = await client.post('api/Produto', body: produtoData);
+  Future<ProdutoEntity> createProduto(
+    Map<String, dynamic> produtoData,
+    String token,
+  ) async {
+    final result = await client.post(
+      'api/Produto',
+      body: produtoData,
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
 
     final data = client.decode(result) as Map<String, dynamic>;
-
     return ProdutoEntity.fromMap(data);
   }
 
-  Future<bool> deleteProduto(int id) async {
+  Future<bool> deleteProduto(int id, String token) async {
     try {
-      await client.delete('api/Produto/$id');
+      await client.delete(
+        'api/Produto/$id',
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
       return true;
     } catch (e) {
       return false;
@@ -44,11 +63,19 @@ class ProdutoApiServices {
   }
 
   Future<ProdutoEntity> updateProduto(
-      int id, Map<String, dynamic> produtoData) async {
-    final result = await client.put('api/Produto/$id', body: produtoData);
+    int id,
+    Map<String, dynamic> produtoData,
+    String token,
+  ) async {
+    final result = await client.put(
+      'api/Produto/$id',
+      body: produtoData,
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
 
     final data = client.decode(result) as Map<String, dynamic>;
-
     return ProdutoEntity.fromMap(data);
   }
 }

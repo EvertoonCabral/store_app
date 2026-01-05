@@ -9,7 +9,7 @@ class AuthViewModel extends ChangeNotifier {
 
   bool _isLoading = false;
   String? _error;
-  String? _token; // se quiser guardar em memória
+  String? _token;
 
   bool get isLoading => _isLoading;
   String? get error => _error;

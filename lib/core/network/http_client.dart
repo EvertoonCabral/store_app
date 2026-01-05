@@ -1,3 +1,4 @@
+// lib/core/network/http_client.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -14,10 +15,21 @@ class HttpClient {
     );
   }
 
-  Future<http.Response> get(String path, {Map<String, dynamic>? query}) async {
+  Map<String, String> _buildHeaders([Map<String, String>? extra]) {
+    return {
+      'Content-type': 'application/json',
+      ...?extra,
+    };
+  }
+
+  Future<http.Response> get(
+    String path, {
+    Map<String, dynamic>? query,
+    Map<String, String>? headers,
+  }) async {
     final result = await _client.get(
       _uri(path, query),
-      headers: {'Content-type': 'application/json'},
+      headers: _buildHeaders(headers),
     );
     if (result.statusCode != 200) {
       throw Exception(
@@ -26,10 +38,14 @@ class HttpClient {
     return result;
   }
 
-  Future<http.Response> post(String path, {Map<String, dynamic>? body}) async {
+  Future<http.Response> post(
+    String path, {
+    Map<String, dynamic>? body,
+    Map<String, String>? headers,
+  }) async {
     final result = await _client.post(
       _uri(path),
-      headers: {'Content-type': 'application/json'},
+      headers: _buildHeaders(headers),
       body: jsonEncode(body),
     );
     if (result.statusCode != 200 && result.statusCode != 201) {
@@ -39,10 +55,14 @@ class HttpClient {
     return result;
   }
 
-  Future<http.Response> put(String path, {Map<String, dynamic>? body}) async {
+  Future<http.Response> put(
+    String path, {
+    Map<String, dynamic>? body,
+    Map<String, String>? headers,
+  }) async {
     final result = await _client.put(
       _uri(path),
-      headers: {'Content-type': 'application/json'},
+      headers: _buildHeaders(headers),
       body: jsonEncode(body),
     );
     if (result.statusCode != 200 && result.statusCode != 204) {
@@ -52,10 +72,13 @@ class HttpClient {
     return result;
   }
 
-  Future<http.Response> delete(String path) async {
+  Future<http.Response> delete(
+    String path, {
+    Map<String, String>? headers,
+  }) async {
     final result = await _client.delete(
       _uri(path),
-      headers: {'Content-type': 'application/json'},
+      headers: _buildHeaders(headers),
     );
     if (result.statusCode != 200 && result.statusCode != 204) {
       throw Exception(

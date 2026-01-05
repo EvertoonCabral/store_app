@@ -10,7 +10,8 @@ class ClientesRepositoryImpl implements ClientesRepository {
   ClientesRepositoryImpl(this.api);
 
   @override
-  Future<PagedResult<ClienteDto>> getClientes(ClienteFiltroDto filtros) {
-    return api.getClientes(filtros);
+  Future<PagedResult<ClienteDto>> getClientes(
+      ClienteFiltroDto filtros, String token) {
+    return api.getClientes(filtros, token);
   }
 }

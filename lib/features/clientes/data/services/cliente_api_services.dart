@@ -8,11 +8,10 @@ class ClienteApiService {
 
   ClienteApiService(this.client);
 
-  Future<PagedResult<ClienteDto>> getClientes(ClienteFiltroDto filtros) async {
-    final result = await client.get(
-      'api/Cliente',
-      query: filtros.toQuery(),
-    );
+  Future<PagedResult<ClienteDto>> getClientes(
+      ClienteFiltroDto filtros, String token) async {
+    final result = await client.get('api/Cliente',
+        query: filtros.toQuery(), headers: {'Authorization': 'Bearer $token'});
     final data = client.decode(result) as Map<String, dynamic>;
     return PagedResult.fromJson(
       data,

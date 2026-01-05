@@ -33,11 +33,17 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => ClienteListViewModel(clienteRepo),
+        ChangeNotifierProxyProvider<AuthViewModel, ClienteListViewModel>(
+          create: (_) =>
+              ClienteListViewModel(clienteRepo, AuthViewModel(authRepo)),
+          update: (_, authVm, previous) =>
+              ClienteListViewModel(clienteRepo, authVm),
         ),
-        ChangeNotifierProvider(
-          create: (_) => ProdutoListViewmodel(produtoRepo),
+        ChangeNotifierProxyProvider<AuthViewModel, ProdutoListViewmodel>(
+          create: (_) =>
+              ProdutoListViewmodel(produtoRepo, AuthViewModel(authRepo)),
+          update: (_, authVm, previous) =>
+              ProdutoListViewmodel(produtoRepo, authVm),
         ),
         ChangeNotifierProvider(
           create: (_) => AuthViewModel(authRepo),

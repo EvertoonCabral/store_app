@@ -13,7 +13,7 @@ class LoginResponse {
     return LoginResponse(
       success: map['success'] as bool,
       message: map['message'] as String? ?? '',
-      token: map['token'] as String? ?? '',
+      token: map['data'] as String? ?? '',
     );
   }
 }
