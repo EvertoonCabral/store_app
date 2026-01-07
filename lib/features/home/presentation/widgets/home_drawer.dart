@@ -41,7 +41,7 @@ class HomeDrawer extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.warehouse),
               title: const Text('Estoque'),
-              onTap: () => Navigator.pushReplacementNamed(context, '/estoque'),
+              onTap: () => Navigator.pushReplacementNamed(context, '/estoques'),
             ),
             ListTile(
               leading: const Icon(Icons.people),

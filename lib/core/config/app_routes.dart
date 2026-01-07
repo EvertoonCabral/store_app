@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_add_page.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_list_page.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_update_page.dart';
+import 'package:store_app/features/estoques/presentation/view/estoque_list_page.dart';
 import 'package:store_app/features/login/presentation/view/login_page.dart';
 import 'package:store_app/features/produtos/data/models/produto_entity.dart';
 import 'package:store_app/features/produtos/presentation/views/produto_add_page.dart';
@@ -19,6 +20,7 @@ class AppRoutes {
   static const String clientes = '/clientes';
   static const String cadastrarCliente = '/cadastrar-cliente';
   static const String editarCliente = '/editar-cliente';
+  static const String estoques = '/estoques';
 
   static Map<String, WidgetBuilder> routes = {
     home: (_) => const HomePage(),
@@ -28,6 +30,7 @@ class AppRoutes {
     clientes: (_) => const ClientesListPage(),
     cadastrarCliente: (_) => const ClientesAddPage(),
     editarCliente: (_) => const ClientesUpdatePage(),
+    estoques: (_) => const EstoqueListPage()
   };
 
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
