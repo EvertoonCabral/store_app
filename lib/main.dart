@@ -1,4 +1,3 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -10,6 +9,9 @@ import 'package:store_app/core/network/http_client.dart';
 import 'package:store_app/features/clientes/data/services/cliente_api_services.dart';
 import 'package:store_app/features/clientes/data/repositories/cliente_repository_impl.dart';
 import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
+import 'package:store_app/features/estoques/data/repositories/estoque_repository_impl.dart';
+import 'package:store_app/features/estoques/data/service/estoque_service.dart';
+import 'package:store_app/features/estoques/presentation/viewmodel/estoque_viewmodel.dart';
 
 import 'package:store_app/features/login/data/service/auth_api_service.dart';
 import 'package:store_app/features/login/data/repositories/auth_repository_impl.dart';
@@ -37,6 +39,10 @@ void main() {
   final produtoApi = ProdutoApiServices(httpClient);
   final produtoRepo = ProdutoRepositoryImpl(produtoApi);
 
+  //Estoque
+  final estoqueApi = EstoqueApiService(httpClient);
+  final estoqueRepo = EstoqueRepositoryImpl(estoqueApi);
+
   runApp(
     MultiProvider(
       providers: [
@@ -62,6 +68,14 @@ void main() {
           ),
           update: (context, authVm, previous) =>
               ProdutoListViewmodel(produtoRepo, authVm),
+        ),
+        ChangeNotifierProxyProvider<AuthViewModel, EstoqueViewmodel>(
+          create: (context) => EstoqueViewmodel(
+            estoqueRepo,
+            context.read<AuthViewModel>(),
+          ),
+          update: (context, authVm, previous) =>
+              EstoqueViewmodel(estoqueRepo, authVm),
         ),
       ],
       child: const PerfumeStoreApp(),

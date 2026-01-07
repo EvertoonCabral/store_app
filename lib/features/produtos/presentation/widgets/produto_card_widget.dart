@@ -16,10 +16,16 @@ class ProdutoCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text(produto.nome),
+        title: Text(
+          produto.nome.toUpperCase(),
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 5,
+            ),
             if (produto.descricao != null && produto.descricao!.isNotEmpty)
               Text(produto.descricao!),
             Text('Valor: ${produto.precoVenda}'),

@@ -16,10 +16,16 @@ class ClienteListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        title: Text(cliente.nome),
+        title: Text(
+          cliente.nome.toUpperCase(),
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: 5,
+            ),
             if (cliente.email != null && cliente.email!.isNotEmpty)
               Text(cliente.email!),
             Text('Telefone: ${cliente.telefone}'),

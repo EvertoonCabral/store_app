@@ -1,12 +1,12 @@
-import 'package:store_app/features/estoques/data/model/estoque_entity.dart';
 import 'package:store_app/core/network/http_client.dart';
+import 'package:store_app/features/estoques/data/model/estoque_entity.dart';
 
 class EstoqueApiService {
   final HttpClient client;
 
-  EstoqueApiService({required this.client});
+  EstoqueApiService(this.client);
 
-  Future<List<EstoqueEntity>> getAllProdutos(String token) async {
+  Future<List<EstoqueEntity>> getAllEstoques(String token) async {
     final result = await client.get(
       'api/Estoque',
       headers: {
@@ -15,7 +15,6 @@ class EstoqueApiService {
     );
 
     final data = client.decode(result);
-
     final list = data as List<dynamic>;
 
     return list
