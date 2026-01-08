@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:store_app/features/estoques/data/model/estoque_entity.dart';
+import 'package:store_app/features/estoques/presentation/view/estoque_detail_page.dart';
 
 class EstoqueCardWidget extends StatelessWidget {
   final EstoqueEntity estoque;
@@ -18,6 +19,14 @@ class EstoqueCardWidget extends StatelessWidget {
 
     return Card(
       child: ListTile(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => EstoqueDetailPage(estoqueId: estoque.id),
+            ),
+          );
+        },
         title: Text(
           estoque.nome.toUpperCase(),
           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -27,18 +36,13 @@ class EstoqueCardWidget extends StatelessWidget {
           children: [
             const SizedBox(height: 5),
             Text('Data de Criação: $dataFormatada'),
-            Text('Total de Items: ${estoque.totalItens}'),
+            Text('Total de Itens: ${estoque.totalItens}'),
             Text('Total de Produtos: ${estoque.totalProdutos}'),
           ],
         ),
-        trailing: Wrap(
-          spacing: 8,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: onEdit,
-            ),
-          ],
+        trailing: IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: onEdit,
         ),
       ),
     );

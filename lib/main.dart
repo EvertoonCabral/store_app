@@ -9,8 +9,10 @@ import 'package:store_app/core/network/http_client.dart';
 import 'package:store_app/features/clientes/data/services/cliente_api_services.dart';
 import 'package:store_app/features/clientes/data/repositories/cliente_repository_impl.dart';
 import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
+import 'package:store_app/features/estoques/data/repositories/estoque_repository.dart';
 import 'package:store_app/features/estoques/data/repositories/estoque_repository_impl.dart';
 import 'package:store_app/features/estoques/data/service/estoque_service.dart';
+import 'package:store_app/features/estoques/presentation/viewmodel/estoque_detail_viewmodel.dart';
 import 'package:store_app/features/estoques/presentation/viewmodel/estoque_viewmodel.dart';
 
 import 'package:store_app/features/login/data/service/auth_api_service.dart';
@@ -76,6 +78,18 @@ void main() {
           ),
           update: (context, authVm, previous) =>
               EstoqueViewmodel(estoqueRepo, authVm),
+        ),
+        ChangeNotifierProxyProvider<AuthViewModel, EstoqueDetailViewmodel>(
+          create: (context) => EstoqueDetailViewmodel(
+            estoqueRepo,
+            produtoRepo,
+            context.read<AuthViewModel>(),
+          ),
+          update: (context, authVm, previous) => EstoqueDetailViewmodel(
+            estoqueRepo,
+            produtoRepo,
+            authVm,
+          ),
         ),
       ],
       child: const PerfumeStoreApp(),

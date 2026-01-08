@@ -1,6 +1,8 @@
 import 'package:store_app/core/network/http_client.dart';
 import 'package:store_app/features/estoques/data/model/estoque_create_dto.dart';
+import 'package:store_app/features/estoques/data/model/estoque_detail_entity.dart';
 import 'package:store_app/features/estoques/data/model/estoque_entity.dart';
+import 'package:store_app/features/estoques/data/model/item_estoque_entity.dart';
 
 class EstoqueApiService {
   final HttpClient client;
@@ -30,5 +32,30 @@ class EstoqueApiService {
       },
       body: request.toMap(),
     );
+  }
+
+  Future<EstoqueDetailEntity> getEstoqueById(String token, int id) async {
+    final result = await client.get(
+      'api/Estoque/$id',
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    final data = client.decode(result);
+    return EstoqueDetailEntity.fromMap(data as Map<String, dynamic>);
+  }
+
+  Future<List<ItemEstoqueEntity>> getItensEstoque(
+      String token, int estoqueId) async {
+    final result = await client.get(
+      'api/Estoque/estoque/$estoqueId/ObterItensEstoque',
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    final data = client.decode(result);
+    final list = data as List<dynamic>;
+
+    return list
+        .map((json) => ItemEstoqueEntity.fromMap(json as Map<String, dynamic>))
+        .toList();
   }
 }

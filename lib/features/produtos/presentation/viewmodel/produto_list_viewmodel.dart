@@ -1,6 +1,4 @@
-// lib/features/produtos/presentation/viewmodel/produto_list_viewmodel.dart
 import 'package:flutter/material.dart';
-import 'package:store_app/features/clientes/data/models/paged_result.dart';
 import 'package:store_app/features/login/presentation/viewmodel/auth_viewmodel.dart';
 import 'package:store_app/features/produtos/data/models/produto_entity.dart';
 import 'package:store_app/features/produtos/data/repositories/produto_repository.dart';
@@ -13,8 +11,8 @@ class ProdutoListViewmodel extends ChangeNotifier {
 
   bool isLoading = false;
   String? error;
-  PagedResult<ProdutoEntity>? result;
-  List<ProdutoEntity>? items = [];
+  List<ProdutoEntity> items = [];
+  ProdutoEntity? produtoSelecionado;
 
   Future<void> retornaProdutos() async {
     final token = authViewModel.token;
@@ -36,5 +34,36 @@ class ProdutoListViewmodel extends ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<ProdutoEntity?> retornaProdutoPorId(int id) async {
+    final token = authViewModel.token;
+    if (token == null || token.isEmpty) {
+      return null;
+    }
+
+    try {
+      return await repository.getProdutoById(id, token);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  String getNomeProduto(int produtoId) {
+    final produto = items.firstWhere(
+      (p) => p.id == produtoId,
+      orElse: () => ProdutoEntity(
+        id: produtoId,
+        nome: 'Produto #$produtoId',
+        marca: '',
+        precoCompra: 0,
+        precoVenda: 0,
+        descricao: null,
+        isAtivo: true,
+        dataCadastro: DateTime.now(),
+        estoqueId: 0,
+      ),
+    );
+    return produto.nome;
   }
 }
