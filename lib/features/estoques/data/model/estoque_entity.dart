@@ -2,6 +2,7 @@ class EstoqueEntity {
   final int id;
   final String nome;
   final DateTime dataCadastro;
+  final String descricao;
   final int totalItens;
   final int totalProdutos;
 
@@ -9,6 +10,7 @@ class EstoqueEntity {
     required this.id,
     required this.nome,
     required this.dataCadastro,
+    required this.descricao,
     required this.totalItens,
     required this.totalProdutos,
   });
@@ -18,6 +20,7 @@ class EstoqueEntity {
       id: map['id'] as int,
       nome: map['nome'] as String,
       dataCadastro: DateTime.parse(map['dataCriacao'] as String),
+      descricao: map['descricao'] as String,
       totalItens: map['totalItens'] as int,
       totalProdutos: map['totalProdutos'] as int,
     );
@@ -28,6 +31,7 @@ class EstoqueEntity {
       'id': id,
       'nome': nome,
       'dataCriacao': dataCadastro.toIso8601String(),
+      'descricao': descricao,
       'totalItens': totalItens,
       'totalProdutos': totalProdutos,
     };
@@ -37,6 +41,7 @@ class EstoqueEntity {
     int? id,
     String? nome,
     DateTime? dataCadastro,
+    String? descricao,
     int? totalItens,
     int? totalProdutos,
   }) {
@@ -44,6 +49,7 @@ class EstoqueEntity {
       id: id ?? this.id,
       nome: nome ?? this.nome,
       dataCadastro: dataCadastro ?? this.dataCadastro,
+      descricao: descricao ?? this.descricao,
       totalItens: totalItens ?? this.totalItens,
       totalProdutos: totalProdutos ?? this.totalProdutos,
     );

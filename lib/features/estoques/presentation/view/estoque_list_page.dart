@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:store_app/features/estoques/presentation/viewmodel/estoque_viewmodel.dart';
+import 'package:store_app/features/estoques/presentation/widgets/Estoque_add_bottom_sheet.dart';
 import 'package:store_app/features/estoques/presentation/widgets/estoque_card_widget.dart';
 
 class EstoqueListPage extends StatefulWidget {
@@ -19,6 +20,24 @@ class _EstoqueListPageState extends State<EstoqueListPage> {
     });
   }
 
+  Future<void> _openAddSheet() async {
+    final vm = context.read<EstoqueViewmodel>();
+
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => EstoqueAddBottomSheet(
+        onSubmit: (nome, descricao) async {
+          return await vm.criarEstoque(nome, descricao);
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<EstoqueViewmodel>();
@@ -32,6 +51,10 @@ class _EstoqueListPageState extends State<EstoqueListPage> {
             icon: const Icon(Icons.arrow_back_ios_outlined),
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _openAddSheet,
+        child: const Icon(Icons.add),
       ),
       body: Builder(
         builder: (context) {

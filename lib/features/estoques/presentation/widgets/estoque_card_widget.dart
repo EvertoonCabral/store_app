@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:store_app/features/estoques/data/model/estoque_entity.dart';
 
 class EstoqueCardWidget extends StatelessWidget {
@@ -13,6 +14,8 @@ class EstoqueCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dataFormatada = DateFormat('dd/MM/yyyy').format(estoque.dataCadastro);
+
     return Card(
       child: ListTile(
         title: Text(
@@ -22,8 +25,8 @@ class EstoqueCardWidget extends StatelessWidget {
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 8),
-            Text('Data de Criação: ${estoque.dataCadastro}'),
+            const SizedBox(height: 5),
+            Text('Data de Criação: $dataFormatada'),
             Text('Total de Items: ${estoque.totalItens}'),
             Text('Total de Produtos: ${estoque.totalProdutos}'),
           ],
