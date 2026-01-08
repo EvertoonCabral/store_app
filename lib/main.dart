@@ -9,7 +9,6 @@ import 'package:store_app/core/network/http_client.dart';
 import 'package:store_app/features/clientes/data/services/cliente_api_services.dart';
 import 'package:store_app/features/clientes/data/repositories/cliente_repository_impl.dart';
 import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
-import 'package:store_app/features/estoques/data/repositories/estoque_repository.dart';
 import 'package:store_app/features/estoques/data/repositories/estoque_repository_impl.dart';
 import 'package:store_app/features/estoques/data/service/estoque_service.dart';
 import 'package:store_app/features/estoques/presentation/viewmodel/estoque_detail_viewmodel.dart';
@@ -21,6 +20,7 @@ import 'package:store_app/features/login/presentation/viewmodel/auth_viewmodel.d
 
 import 'package:store_app/features/produtos/data/services/produto_api_services.dart';
 import 'package:store_app/features/produtos/data/repositories/produto_repository_impl.dart';
+import 'package:store_app/features/produtos/presentation/viewmodel/produto_detail_viewmodel.dart';
 import 'package:store_app/features/produtos/presentation/viewmodel/produto_list_viewmodel.dart';
 
 void main() {
@@ -62,7 +62,6 @@ void main() {
               ClienteListViewModel(clienteRepo, authVm),
         ),
 
-        // 3) ProdutoListViewmodel depende do MESMO AuthViewModel
         ChangeNotifierProxyProvider<AuthViewModel, ProdutoListViewmodel>(
           create: (context) => ProdutoListViewmodel(
             produtoRepo,
@@ -90,6 +89,14 @@ void main() {
             produtoRepo,
             authVm,
           ),
+        ),
+        ChangeNotifierProxyProvider<AuthViewModel, ProdutoDetailViewmodel>(
+          create: (context) => ProdutoDetailViewmodel(
+            produtoRepo,
+            context.read<AuthViewModel>(),
+          ),
+          update: (context, authVm, previous) =>
+              ProdutoDetailViewmodel(produtoRepo, authVm),
         ),
       ],
       child: const PerfumeStoreApp(),

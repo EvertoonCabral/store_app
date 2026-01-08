@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:store_app/core/config/app_routes.dart';
-import 'package:store_app/features/produtos/data/models/produto_entity.dart';
 import 'package:store_app/features/produtos/presentation/viewmodel/produto_list_viewmodel.dart';
 import 'package:store_app/features/produtos/presentation/widgets/produto_card_widget.dart';
 
@@ -44,7 +43,7 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
             child: Text(vm.error!),
           );
         }
-        final items = vm.items ?? <ProdutoEntity>[];
+        final items = vm.items;
         if (items.isEmpty) {
           return const Center(
             child: Text('Nenhum produto encontrado'),
@@ -53,14 +52,14 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
         return ListView.builder(
           itemCount: items.length,
           itemBuilder: (_, i) {
-            final p = items[i];
+            final produtoItem = items[i];
             return ProdutoCardWidget(
-              produto: p,
+              produto: produtoItem,
               onEdit: () async {
                 final resultado = await Navigator.pushNamed(
                   context,
                   AppRoutes.editarProduto,
-                  arguments: p,
+                  arguments: produtoItem,
                 );
 
                 if (resultado != null) {
@@ -75,7 +74,8 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
                   context: context,
                   builder: (dialogContext) => AlertDialog(
                     title: const Text('Confirmar exclusão'),
-                    content: Text('Deseja realmente excluir "${p.nome}"?'),
+                    content:
+                        Text('Deseja realmente excluir "${produtoItem.nome}"?'),
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(dialogContext),
@@ -87,7 +87,8 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
                           // Aqui você chama o método de deletar do viewmodel
                           // context.read<ProdutoListViewmodel>().deletarProduto(p.id);
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('${p.nome} excluído')),
+                            SnackBar(
+                                content: Text('${produtoItem.nome} excluído')),
                           );
                         },
                         child: const Text(
@@ -111,7 +112,6 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
             AppRoutes.cadastrarProduto,
           );
 
-          // Se retornou algo (produto criado), recarrega a lista
           if (resultado != null) {
             if (mounted) {
               // ignore: use_build_context_synchronously
