@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_app/core/widgets/status_chip_widget.dart';
 import 'package:store_app/features/produtos/data/models/produto_entity.dart';
 import 'package:store_app/features/produtos/presentation/views/produto_detail_page.dart';
 
@@ -76,7 +77,7 @@ class ProdutoCardWidget extends StatelessWidget {
                             ),
                           ),
                         ),
-                        _StatusChip(isAtivo: produto.isAtivo),
+                        StatusChipWidget(isAtivo: produto.isAtivo),
                       ],
                     ),
 
@@ -132,31 +133,6 @@ class ProdutoCardWidget extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _StatusChip extends StatelessWidget {
-  final bool isAtivo;
-
-  const _StatusChip({required this.isAtivo});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: (isAtivo ? Colors.green : Colors.red).withAlpha(30),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        isAtivo ? 'Ativo' : 'Inativo',
-        style: TextStyle(
-          fontSize: 11,
-          fontWeight: FontWeight.w600,
-          color: isAtivo ? Colors.green : Colors.red,
         ),
       ),
     );

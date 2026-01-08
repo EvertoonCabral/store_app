@@ -58,10 +58,10 @@ class _ClientesListPageState extends State<ClientesListPage> {
             itemCount: items.length,
             itemBuilder: (_, i) {
               final c = items[i];
-              return ClienteListItem(
+              return ClienteCardWidget(
                 cliente: c,
                 onEdit: () {
-                  Navigator.of(context).pushReplacementNamed('');
+                  Navigator.of(context).pushReplacementNamed('/editar-cliente');
                 },
                 onDelete: () {
                   ScaffoldMessenger.of(context).showSnackBar(
