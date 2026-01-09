@@ -8,6 +8,7 @@ import 'package:store_app/features/produtos/data/models/produto_entity.dart';
 import 'package:store_app/features/produtos/presentation/views/produto_add_page.dart';
 import 'package:store_app/features/produtos/presentation/views/produto_update_page.dart';
 import 'package:store_app/features/produtos/presentation/views/produtos_list_page.dart';
+import 'package:store_app/features/vendas/presentation/view/vendas_list_page.dart';
 import '../../features/home/presentation/home_page.dart';
 
 class AppRoutes {
@@ -21,6 +22,7 @@ class AppRoutes {
   static const String cadastrarCliente = '/cadastrar-cliente';
   static const String editarCliente = '/editar-cliente';
   static const String estoques = '/estoques';
+  static const String vendas = '/vendas';
 
   static Map<String, WidgetBuilder> routes = {
     home: (_) => const HomePage(),
@@ -30,7 +32,8 @@ class AppRoutes {
     clientes: (_) => const ClientesListPage(),
     cadastrarCliente: (_) => const ClientesAddPage(),
     editarCliente: (_) => const ClientesUpdatePage(),
-    estoques: (_) => const EstoqueListPage()
+    estoques: (_) => const EstoqueListPage(),
+    vendas: (_) => const VendasListPage(),
   };
 
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {

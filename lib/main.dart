@@ -22,6 +22,9 @@ import 'package:store_app/features/produtos/data/services/produto_api_services.d
 import 'package:store_app/features/produtos/data/repositories/produto_repository_impl.dart';
 import 'package:store_app/features/produtos/presentation/viewmodel/produto_detail_viewmodel.dart';
 import 'package:store_app/features/produtos/presentation/viewmodel/produto_list_viewmodel.dart';
+import 'package:store_app/features/vendas/data/repository/venda_repository_impl.dart';
+import 'package:store_app/features/vendas/data/services/venda_api_service.dart';
+import 'package:store_app/features/vendas/presentation/viewmodel/vendas_list_viewmodel.dart';
 
 void main() {
   final httpClient = HttpClient(
@@ -44,6 +47,10 @@ void main() {
   //Estoque
   final estoqueApi = EstoqueApiService(httpClient);
   final estoqueRepo = EstoqueRepositoryImpl(estoqueApi);
+
+  //Vendas
+  final vendasApi = VendaApiService(httpClient);
+  final vendaRepo = VendaRepositoryImpl(vendasApi);
 
   runApp(
     MultiProvider(
@@ -97,6 +104,14 @@ void main() {
           ),
           update: (context, authVm, previous) =>
               ProdutoDetailViewmodel(produtoRepo, authVm),
+        ),
+        ChangeNotifierProxyProvider<AuthViewModel, VendasListViewmodel>(
+          create: (context) => VendasListViewmodel(
+            vendaRepo,
+            context.read<AuthViewModel>(),
+          ),
+          update: (context, authVm, previous) =>
+              VendasListViewmodel(vendaRepo, authVm),
         ),
       ],
       child: const PerfumeStoreApp(),
