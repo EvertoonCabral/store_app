@@ -18,4 +18,13 @@ class ClienteApiService {
       (json) => ClienteDto.fromJson(json),
     );
   }
+
+  Future<ClienteDto> getCliente(int id, String token) async {
+    final result = await client
+        .get('api/Cliente/$id', headers: {'Authorization': 'Bearer $token'});
+
+    final data = client.decode(result) as Map<String, dynamic>;
+
+    return ClienteDto.fromJson(data);
+  }
 }

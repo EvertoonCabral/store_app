@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:store_app/features/vendas/data/model/venda_entity.dart';
 import 'package:store_app/features/vendas/data/model/status_venda.dart';
+import 'package:store_app/features/vendas/presentation/view/venda_detail_page.dart';
 
 class VendaCardWidget extends StatelessWidget {
   final VendaEntity venda;
@@ -52,13 +53,12 @@ class VendaCardWidget extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(14),
         onTap: () {
-          // Navegação para detalhes da venda
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (_) => VendaDetailPage(vendaId: venda.id),
-          //   ),
-          // );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => VendaDetailPage(vendaId: venda.id),
+            ),
+          );
         },
         child: Padding(
           padding: const EdgeInsets.all(12),

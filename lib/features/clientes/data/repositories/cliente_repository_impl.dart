@@ -14,4 +14,9 @@ class ClientesRepositoryImpl implements ClientesRepository {
       ClienteFiltroDto filtros, String token) {
     return api.getClientes(filtros, token);
   }
+
+  @override
+  Future<ClienteDto> getCliente(int id, String token) {
+    return api.getCliente(id, token);
+  }
 }

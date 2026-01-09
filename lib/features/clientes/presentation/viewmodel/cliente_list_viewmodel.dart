@@ -36,4 +36,17 @@ class ClienteListViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<ClienteDto?> retornaClientePorId(int id) async {
+    final token = authViewModel.token;
+    if (token == null || token.isEmpty) {
+      return null;
+    }
+
+    try {
+      return await repository.getCliente(id, token);
+    } catch (e) {
+      return null;
+    }
+  }
 }

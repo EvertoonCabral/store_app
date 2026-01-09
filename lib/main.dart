@@ -60,58 +60,70 @@ void main() {
           create: (_) => AuthViewModel(authRepo),
         ),
 
+        // 2) ClienteListViewModel: disponível globalmente
         ChangeNotifierProxyProvider<AuthViewModel, ClienteListViewModel>(
           create: (context) => ClienteListViewModel(
             clienteRepo,
             context.read<AuthViewModel>(),
           ),
           update: (context, authVm, previous) =>
-              ClienteListViewModel(clienteRepo, authVm),
+              previous ?? ClienteListViewModel(clienteRepo, authVm),
         ),
 
+        // 3) ProdutoListViewmodel
         ChangeNotifierProxyProvider<AuthViewModel, ProdutoListViewmodel>(
           create: (context) => ProdutoListViewmodel(
             produtoRepo,
             context.read<AuthViewModel>(),
           ),
           update: (context, authVm, previous) =>
-              ProdutoListViewmodel(produtoRepo, authVm),
+              previous ?? ProdutoListViewmodel(produtoRepo, authVm),
         ),
+
+        // 4) EstoqueViewmodel
         ChangeNotifierProxyProvider<AuthViewModel, EstoqueViewmodel>(
           create: (context) => EstoqueViewmodel(
             estoqueRepo,
             context.read<AuthViewModel>(),
           ),
           update: (context, authVm, previous) =>
-              EstoqueViewmodel(estoqueRepo, authVm),
+              previous ?? EstoqueViewmodel(estoqueRepo, authVm),
         ),
+
+        // 5) EstoqueDetailViewmodel
         ChangeNotifierProxyProvider<AuthViewModel, EstoqueDetailViewmodel>(
           create: (context) => EstoqueDetailViewmodel(
             estoqueRepo,
             produtoRepo,
             context.read<AuthViewModel>(),
           ),
-          update: (context, authVm, previous) => EstoqueDetailViewmodel(
-            estoqueRepo,
-            produtoRepo,
-            authVm,
-          ),
+          update: (context, authVm, previous) =>
+              previous ??
+              EstoqueDetailViewmodel(
+                estoqueRepo,
+                produtoRepo,
+                authVm,
+              ),
         ),
+
+        // 6) ProdutoDetailViewmodel
         ChangeNotifierProxyProvider<AuthViewModel, ProdutoDetailViewmodel>(
           create: (context) => ProdutoDetailViewmodel(
             produtoRepo,
             context.read<AuthViewModel>(),
           ),
           update: (context, authVm, previous) =>
-              ProdutoDetailViewmodel(produtoRepo, authVm),
+              previous ?? ProdutoDetailViewmodel(produtoRepo, authVm),
         ),
+
+        // 7) VendasListViewmodel
         ChangeNotifierProxyProvider<AuthViewModel, VendasListViewmodel>(
           create: (context) => VendasListViewmodel(
             vendaRepo,
             context.read<AuthViewModel>(),
           ),
           update: (context, authVm, previous) =>
-              VendasListViewmodel(vendaRepo, authVm),
+              previous ?? VendasListViewmodel(vendaRepo, authVm),
         ),
       ],
       child: const PerfumeStoreApp(),
