@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:store_app/features/clientes/data/models/cliente_dto.dart';
+import 'package:store_app/features/clientes/data/models/cliente_entity.dart';
 import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
 import 'package:store_app/features/vendas/data/model/status_venda.dart';
 import 'package:store_app/features/vendas/data/model/venda_detail.dart';

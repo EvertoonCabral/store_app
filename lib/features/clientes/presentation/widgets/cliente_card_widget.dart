@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:store_app/core/widgets/status_chip_widget.dart';
-import 'package:store_app/features/clientes/data/models/cliente_dto.dart';
+import 'package:store_app/features/clientes/data/models/cliente_entity.dart';
 
 class ClienteCardWidget extends StatelessWidget {
   final ClienteDto cliente;

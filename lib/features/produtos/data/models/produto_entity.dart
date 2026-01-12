@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class ProdutoEntity {
-  final int id;
+  final int? id;
   final String nome;
   final String marca;
   final double precoCompra;
@@ -12,7 +12,7 @@ class ProdutoEntity {
   final int estoqueId;
 
   const ProdutoEntity({
-    required this.id,
+    this.id,
     required this.nome,
     required this.marca,
     required this.precoCompra,
@@ -49,7 +49,7 @@ class ProdutoEntity {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'id': id,
+      if (id != null) 'id': id,
       'nome': nome,
       'marca': marca,
       'precoCompra': precoCompra,

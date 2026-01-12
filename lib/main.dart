@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-
 import 'package:store_app/core/config/app_routes.dart';
 import 'package:store_app/core/config/app_theme.dart';
 import 'package:store_app/core/network/http_client.dart';
-
 import 'package:store_app/features/clientes/data/services/cliente_api_services.dart';
 import 'package:store_app/features/clientes/data/repositories/cliente_repository_impl.dart';
 import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
@@ -13,17 +11,16 @@ import 'package:store_app/features/estoques/data/repositories/estoque_repository
 import 'package:store_app/features/estoques/data/service/estoque_service.dart';
 import 'package:store_app/features/estoques/presentation/viewmodel/estoque_detail_viewmodel.dart';
 import 'package:store_app/features/estoques/presentation/viewmodel/estoque_viewmodel.dart';
-
 import 'package:store_app/features/login/data/service/auth_api_service.dart';
 import 'package:store_app/features/login/data/repositories/auth_repository_impl.dart';
 import 'package:store_app/features/login/presentation/viewmodel/auth_viewmodel.dart';
-
 import 'package:store_app/features/produtos/data/services/produto_api_services.dart';
 import 'package:store_app/features/produtos/data/repositories/produto_repository_impl.dart';
 import 'package:store_app/features/produtos/presentation/viewmodel/produto_detail_viewmodel.dart';
 import 'package:store_app/features/produtos/presentation/viewmodel/produto_list_viewmodel.dart';
 import 'package:store_app/features/vendas/data/repository/venda_repository_impl.dart';
 import 'package:store_app/features/vendas/data/services/venda_api_service.dart';
+import 'package:store_app/features/vendas/presentation/viewmodel/cadastrar_venda_viewmodel.dart';
 import 'package:store_app/features/vendas/presentation/viewmodel/vendas_list_viewmodel.dart';
 
 void main() {
@@ -124,6 +121,15 @@ void main() {
           ),
           update: (context, authVm, previous) =>
               previous ?? VendasListViewmodel(vendaRepo, authVm),
+        ),
+        // 8) VendaCadastroViewmodel
+        ChangeNotifierProxyProvider<AuthViewModel, VendaCadastroViewmodel>(
+          create: (context) => VendaCadastroViewmodel(
+            vendaRepo,
+            context.read<AuthViewModel>(),
+          ),
+          update: (context, authVm, previous) =>
+              previous ?? VendaCadastroViewmodel(vendaRepo, authVm),
         ),
       ],
       child: const PerfumeStoreApp(),

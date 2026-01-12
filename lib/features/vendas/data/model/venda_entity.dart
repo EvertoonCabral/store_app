@@ -41,7 +41,7 @@ class VendaEntity {
       'dataVenda': dataVenda.toIso8601String(),
       'valorTotal': valorTotal,
       'desconto': desconto,
-      'status': status.value, // salva como int (1,2,3)
+      'status': status.value,
       'usuarioVendedor': usuarioVendedor,
     };
   }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
 import '../widgets/cliente_card_widget.dart';
-import '../../data/models/cliente_dto.dart';
+import '../../data/models/cliente_entity.dart';
 
 class ClientesListPage extends StatefulWidget {
   const ClientesListPage({super.key});

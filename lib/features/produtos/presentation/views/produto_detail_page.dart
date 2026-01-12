@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:store_app/features/produtos/presentation/viewmodel/produto_detail_viewmodel.dart';
 
 class ProdutoDetailPage extends StatefulWidget {
-  final int produtoId;
+  final int? produtoId;
 
   const ProdutoDetailPage({
     super.key,

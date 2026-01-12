@@ -58,7 +58,7 @@ class EstoqueCardWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      estoque.nome.toUpperCase(),
+                      '#${estoque.id.toString()} - ${estoque.nome.toUpperCase()}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(

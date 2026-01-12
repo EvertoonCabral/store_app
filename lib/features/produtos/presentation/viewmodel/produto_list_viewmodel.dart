@@ -14,6 +14,30 @@ class ProdutoListViewmodel extends ChangeNotifier {
   List<ProdutoEntity> items = [];
   ProdutoEntity? produtoSelecionado;
 
+  Future<void> cadastrarProduto(ProdutoEntity produto) async {
+    final token = authViewModel.token;
+
+    if (token == null || token.isEmpty) {
+      error = 'Usuário não autenticado';
+      notifyListeners();
+      return;
+    }
+
+    try {
+      isLoading = true;
+      error = null;
+      notifyListeners();
+
+      await repository.postProdutos(produto, token);
+    } catch (e) {
+      error = 'Erro ao cadastrar produto';
+      rethrow;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> retornaProdutos() async {
     final token = authViewModel.token;
     if (token == null || token.isEmpty) {

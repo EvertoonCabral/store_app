@@ -1,3 +1,4 @@
+import 'package:store_app/features/vendas/data/model/create_venda_request.dart';
 import 'package:store_app/features/vendas/data/model/venda_detail.dart';
 import 'package:store_app/features/vendas/data/model/venda_entity.dart';
 import 'package:store_app/features/vendas/data/repository/venda_repository.dart';
@@ -16,5 +17,10 @@ class VendaRepositoryImpl implements VendaRepository {
   @override
   Future<VendaDetailEntity> getVendaByid(String token, int id) {
     return api.getVenda(id, token);
+  }
+
+  @override
+  Future<void> cadastrarVenda(String token, VendaRequestModel venda) async {
+    return await api.cadastrarVenda(token, venda);
   }
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:store_app/features/produtos/data/models/produto_entity.dart';
+import 'package:store_app/features/produtos/presentation/viewmodel/produto_list_viewmodel.dart';
 
 class ProdutoAddPage extends StatefulWidget {
   const ProdutoAddPage({super.key});
@@ -29,22 +32,32 @@ class _ProdutoAddPageState extends State<ProdutoAddPage> {
     super.dispose();
   }
 
-  void _salvarProduto() {
-    if (_formKey.currentState!.validate()) {
-      final produto = {
-        'nome': _nomeController.text,
-        'marca': _marcaController.text,
-        'precoCompra': double.parse(_precoCompraController.text),
-        'precoVenda': double.parse(_precoVendaController.text),
-        'descricao': _descricaoController.text.isEmpty
-            ? null
-            : _descricaoController.text,
-        'isAtivo': _isAtivo,
-        'dataCadastro': DateTime.now(),
-        'estoqueId': int.parse(_estoqueIdController.text),
-      };
+  void _salvarProduto() async {
+    if (!_formKey.currentState!.validate()) return;
 
-      Navigator.pop(context, produto);
+    final produto = ProdutoEntity(
+      nome: _nomeController.text,
+      marca: _marcaController.text,
+      precoCompra: double.parse(_precoCompraController.text),
+      precoVenda: double.parse(_precoVendaController.text),
+      dataCadastro: DateTime.now(),
+      descricao:
+          _descricaoController.text.isEmpty ? null : _descricaoController.text,
+      isAtivo: _isAtivo,
+      estoqueId: int.parse(_estoqueIdController.text),
+    );
+
+    final vm = context.read<ProdutoListViewmodel>();
+
+    try {
+      await vm.cadastrarProduto(produto);
+
+      if (!mounted) return;
+      Navigator.pop(context, true);
+    } catch (_) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Erro ao cadastrar produto')),
+      );
     }
   }
 

@@ -36,7 +36,7 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
   }
 
   @override
-  Future<ProdutoEntity> getProdutoById(int id, String token) {
+  Future<ProdutoEntity> getProdutoById(int? id, String token) {
     return api.getProdutoById(id, token);
   }
 

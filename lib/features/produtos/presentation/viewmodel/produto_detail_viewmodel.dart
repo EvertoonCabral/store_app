@@ -13,7 +13,7 @@ class ProdutoDetailViewmodel extends ChangeNotifier {
   String? error;
   ProdutoEntity? produto;
 
-  Future<void> carregarProduto(int produtoId) async {
+  Future<void> carregarProduto(int? produtoId) async {
     final token = authViewModel.token;
 
     if (token == null || token.isEmpty) {

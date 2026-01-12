@@ -23,7 +23,7 @@ class ProdutoApiServices {
         .toList();
   }
 
-  Future<ProdutoEntity> getProdutoById(int id, String token) async {
+  Future<ProdutoEntity> getProdutoById(int? id, String token) async {
     final result = await client
         .get('api/Produto/$id', headers: {'Authorization': 'Bearer $token'});
 

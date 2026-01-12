@@ -1,5 +1,5 @@
 import 'package:store_app/core/network/http_client.dart';
-import 'package:store_app/features/clientes/data/models/cliente_dto.dart';
+import 'package:store_app/features/clientes/data/models/cliente_entity.dart';
 import 'package:store_app/features/clientes/data/models/cliente_filtro_dto.dart';
 import 'package:store_app/features/clientes/data/models/paged_result.dart';
 

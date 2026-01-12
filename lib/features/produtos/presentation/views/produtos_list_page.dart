@@ -106,15 +106,19 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
       }),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          // Navega para cadastrar produto
-          final resultado = await Navigator.pushNamed(
+          final result = await Navigator.pushNamed(
             context,
             AppRoutes.cadastrarProduto,
           );
-
-          if (resultado != null) {
+          if (result == true) {
             if (mounted) {
-              // ignore: use_build_context_synchronously
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Produto cadastrado com sucesso!'),
+                  backgroundColor: Colors.green,
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
               context.read<ProdutoListViewmodel>().retornaProdutos();
             }
           }
