@@ -26,6 +26,21 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
   bool _isLoadingCliente = false;
   String? _error;
 
+  // ✅ ADICIONE ESTES GETTERS AQUI (logo após as variáveis de estado)
+  double get _subtotalItens {
+    if (_venda == null) return 0;
+
+    return _venda!.itensVenda.fold(
+      0,
+      (total, item) => total + (item.precoUnitario ?? 0) * item.quantidade,
+    );
+  }
+
+  double get _totalVenda {
+    return _subtotalItens - (_venda?.desconto ?? 0);
+  }
+  // ✅ FIM DOS GETTERS
+
   @override
   void initState() {
     super.initState();
@@ -114,7 +129,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
         title: const Text('Finalizar Venda'),
         content: Text(
           'Deseja realmente finalizar a venda #${_venda!.id}?\n\n'
-          'Valor Total: R\$ ${(_venda!.valorTotal - _venda!.desconto).toStringAsFixed(2)}',
+          'Valor Total: R\$ ${_totalVenda.toStringAsFixed(2)}', // ✅ AJUSTADO
         ),
         actions: [
           TextButton(
@@ -268,7 +283,179 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
 
                           const SizedBox(height: 16),
 
-                          // Valores
+                          // ✅ ITENS DA VENDA (MOVIDO PARA CIMA)
+                          const Text(
+                            'Itens da Venda',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+
+                          if (_venda!.itensVenda.isEmpty)
+                            Card(
+                              elevation: 2,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Center(
+                                  child: Text(
+                                    'Nenhum item na venda',
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          else
+                            Card(
+                              elevation: 2,
+                              child: Column(
+                                children: [
+                                  // Cabeçalho da tabela
+                                  Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: theme.colorScheme.primary
+                                          .withOpacity(0.1),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(12),
+                                        topRight: Radius.circular(12),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Expanded(
+                                          flex: 3,
+                                          child: Text(
+                                            'Produto',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ),
+                                        const Expanded(
+                                          flex: 1,
+                                          child: Text(
+                                            'Qtd',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ),
+                                        const Expanded(
+                                          flex: 2,
+                                          child: Text(
+                                            'Preço Un.',
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ),
+                                        const Expanded(
+                                          flex: 2,
+                                          child: Text(
+                                            'Subtotal',
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  // Lista de itens
+                                  ListView.separated(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    itemCount: _venda!.itensVenda.length,
+                                    separatorBuilder: (context, index) =>
+                                        const Divider(height: 1),
+                                    itemBuilder: (context, index) {
+                                      final item = _venda!.itensVenda[index];
+                                      return Padding(
+                                        padding: const EdgeInsets.all(12),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 3,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    item.nomeProduto ?? '',
+                                                    style: const TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    '#${item.produtoId}',
+                                                    style: TextStyle(
+                                                      fontSize: 11,
+                                                      color: Colors.grey[600],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                '${item.quantidade}',
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 2,
+                                              child: Text(
+                                                'R\$ ${item.precoUnitario?.toStringAsFixed(2)}',
+                                                textAlign: TextAlign.right,
+                                                style: const TextStyle(
+                                                    fontSize: 13),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              flex: 2,
+                                              child: Text(
+                                                'R\$ ${item.subTotal?.toStringAsFixed(2)}',
+                                                textAlign: TextAlign.right,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                  color:
+                                                      theme.colorScheme.primary,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                          const SizedBox(height: 16),
+
+                          // ✅ VALORES (AGORA ABAIXO DOS ITENS)
                           const Text(
                             'Valores',
                             style: TextStyle(
@@ -286,7 +473,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
                                 children: [
                                   _buildValorRow(
                                     label: 'Subtotal',
-                                    valor: _venda!.valorTotal,
+                                    valor: _subtotalItens, // ✅ AJUSTADO
                                     isSubtotal: true,
                                   ),
                                   if (_venda!.desconto > 0) ...[
@@ -300,8 +487,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
                                   const Divider(height: 24, thickness: 2),
                                   _buildValorRow(
                                     label: 'Total',
-                                    valor:
-                                        _venda!.valorTotal - _venda!.desconto,
+                                    valor: _totalVenda, // ✅ AJUSTADO
                                     isTotal: true,
                                   ),
                                 ],

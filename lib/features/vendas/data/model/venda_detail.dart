@@ -1,3 +1,4 @@
+import 'package:store_app/features/vendas/data/model/create_item_venda_request.dart';
 import 'package:store_app/features/vendas/data/model/status_venda.dart';
 
 class VendaDetailEntity {
@@ -8,6 +9,7 @@ class VendaDetailEntity {
   final double desconto;
   final StatusVenda status;
   final String usuarioVendedor;
+  final List<CreateItemVendaRequest> itensVenda;
 
   const VendaDetailEntity({
     required this.id,
@@ -17,6 +19,7 @@ class VendaDetailEntity {
     required this.desconto,
     required this.status,
     required this.usuarioVendedor,
+    this.itensVenda = const [],
   });
 
   VendaDetailEntity copyWith({
@@ -27,6 +30,7 @@ class VendaDetailEntity {
     double? desconto,
     StatusVenda? status,
     String? usuarioVendedor,
+    List<CreateItemVendaRequest>? itensVenda, // ← TROQUE PARA ItemVendaDto
   }) {
     return VendaDetailEntity(
       id: id ?? this.id,
@@ -36,6 +40,7 @@ class VendaDetailEntity {
       desconto: desconto ?? this.desconto,
       status: status ?? this.status,
       usuarioVendedor: usuarioVendedor ?? this.usuarioVendedor,
+      itensVenda: itensVenda ?? this.itensVenda,
     );
   }
 
@@ -46,8 +51,10 @@ class VendaDetailEntity {
       'dataVenda': dataVenda.toIso8601String(),
       'valorTotal': valorTotal,
       'desconto': desconto,
-      'status': status.value, // salva como int (1,2,3)
+      'status': status.value,
       'usuarioVendedor': usuarioVendedor,
+      'itensVenda':
+          itensVenda.map((x) => x.toJson()).toList(), // ← Agora funciona
     };
   }
 
@@ -61,6 +68,12 @@ class VendaDetailEntity {
       status: StatusVenda.fromAny(map['status'] ?? map['Status']),
       usuarioVendedor:
           (map['usuarioVendedor'] ?? map['UsuarioVendedor']) as String,
+      itensVenda: map['itensVenda'] != null
+          ? (map['itensVenda'] as List)
+              .map((item) =>
+                  CreateItemVendaRequest.fromMap(item as Map<String, dynamic>))
+              .toList()
+          : [],
     );
   }
 
@@ -70,7 +83,7 @@ class VendaDetailEntity {
 
   @override
   String toString() {
-    return 'VendaDetailEntity(id: $id, clienteId: $clienteId, dataVenda: $dataVenda, valorTotal: $valorTotal, desconto: $desconto, status: $status, usuarioVendedor: $usuarioVendedor)';
+    return 'VendaDetailEntity(id: $id, clienteId: $clienteId, dataVenda: $dataVenda, valorTotal: $valorTotal, desconto: $desconto, status: $status, usuarioVendedor: $usuarioVendedor, itensVenda: $itensVenda)';
   }
 
   @override

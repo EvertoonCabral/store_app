@@ -164,31 +164,22 @@ class VendaCardWidget extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              if (venda.desconto > 0) ...[
-                                Text(
-                                  'Subtotal: R\$ ${venda.valorTotal.toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                Text(
-                                  'Desconto: R\$ ${venda.desconto.toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.red,
-                                  ),
-                                ),
-                                const SizedBox(height: 2),
-                              ],
                               Text(
-                                'Total: R\$ ${valorFinal.toStringAsFixed(2)}',
+                                'Total: R\$ ${venda.valorTotal.toStringAsFixed(2)}',
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
                                   color: theme.colorScheme.primary,
                                 ),
                               ),
+                              if (venda.desconto > 0)
+                                Text(
+                                  'Desconto aplicado: R\$ ${venda.desconto.toStringAsFixed(2)}',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.red,
+                                  ),
+                                ),
                             ],
                           ),
                         ),
