@@ -32,7 +32,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
 
     return _venda!.itensVenda.fold(
       0,
-      (total, item) => total + (item.precoUnitario ?? 0) * item.quantidade,
+      (total, item) => total + (item.precoUnitario) * item.quantidade,
     );
   }
 
@@ -319,7 +319,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
                                     padding: const EdgeInsets.all(12),
                                     decoration: BoxDecoration(
                                       color: theme.colorScheme.primary
-                                          .withOpacity(0.1),
+                                          .withValues(alpha: 0.1),
                                       borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(12),
                                         topRight: Radius.circular(12),
@@ -425,7 +425,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
                                             Expanded(
                                               flex: 2,
                                               child: Text(
-                                                'R\$ ${item.precoUnitario?.toStringAsFixed(2)}',
+                                                'R\$ ${item.precoUnitario.toStringAsFixed(2)}',
                                                 textAlign: TextAlign.right,
                                                 style: const TextStyle(
                                                     fontSize: 13),

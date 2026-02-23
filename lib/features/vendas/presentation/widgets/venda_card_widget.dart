@@ -42,7 +42,6 @@ class VendaCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final dateFormat = DateFormat('dd/MM/yyyy HH:mm');
-    final valorFinal = venda.valorTotal - venda.desconto;
 
     return Card(
       elevation: 3,

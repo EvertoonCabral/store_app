@@ -210,7 +210,6 @@ String getDifferentValue(String type) {
 }
 
 Future<void> fixTestWithLLM(String sourceFile, String testFile) async {
-  final sourceCode = await File(sourceFile).readAsString();
   final testCode = await File(testFile).readAsString();
 
   final diffResult = await Process.run('git', ['diff', sourceFile]);
