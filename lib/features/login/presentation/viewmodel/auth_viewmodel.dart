@@ -1,15 +1,17 @@
 import 'package:flutter/foundation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:store_app/core/token_store.dart';
 import 'package:store_app/features/login/data/repositories/auth_repository.dart';
 
-/// Chave usada para persistir o token no SharedPreferences.
 const _kTokenKey = 'auth_token';
 
 class AuthViewModel extends ChangeNotifier {
-  /// Depende da INTERFACE [AuthRepository], não da implementação concreta.
   final AuthRepository _repository;
+  final TokenStore _tokenStore;
+  final FlutterSecureStorage _secureStorage;
 
-  AuthViewModel(this._repository) {
+  AuthViewModel(this._repository, this._tokenStore)
+      : _secureStorage = const FlutterSecureStorage() {
     _restoreToken();
   }
 
@@ -22,12 +24,11 @@ class AuthViewModel extends ChangeNotifier {
   String? get token => _token;
   bool get isAuthenticated => _token != null && _token!.isNotEmpty;
 
-  /// Restaura o token salvo ao iniciar o app.
   Future<void> _restoreToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final saved = prefs.getString(_kTokenKey);
+    final saved = await _secureStorage.read(key: _kTokenKey);
     if (saved != null && saved.isNotEmpty) {
       _token = saved;
+      _tokenStore.setToken(saved);
       notifyListeners();
     }
   }
@@ -49,12 +50,11 @@ class AuthViewModel extends ChangeNotifier {
       }
 
       _token = result.token;
+      _tokenStore.setToken(_token);
       _isLoading = false;
       notifyListeners();
 
-      // Persiste o token para sobreviver ao restart do app.
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString(_kTokenKey, _token!);
+      await _secureStorage.write(key: _kTokenKey, value: _token!);
 
       return true;
     } catch (e) {
@@ -65,12 +65,30 @@ class AuthViewModel extends ChangeNotifier {
     }
   }
 
-  /// Limpa o token da memória e do armazenamento local.
-  void logout() {
+  /// Logout iniciado pelo usuário: invalida o token no servidor antes de limpar localmente.
+  Future<void> logout() async {
+    final currentToken = _token;
+    _clearSession();
+
+    if (currentToken != null && currentToken.isNotEmpty) {
+      try {
+        await _repository.logout(currentToken);
+      } catch (_) {
+        // Ignora erros de rede no logout — sessão local já foi limpa.
+      }
+    }
+  }
+
+  /// Logout forçado por resposta 401 — apenas limpa a sessão local.
+  void forceLogout() {
+    _clearSession();
+  }
+
+  void _clearSession() {
     _token = null;
     _error = null;
+    _tokenStore.clear();
     notifyListeners();
-    // Remove do storage em background — não bloqueia a UI.
-    SharedPreferences.getInstance().then((prefs) => prefs.remove(_kTokenKey));
+    _secureStorage.delete(key: _kTokenKey);
   }
 }

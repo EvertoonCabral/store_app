@@ -59,10 +59,12 @@ class HomeDrawer extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.exit_to_app),
               title: const Text('Sair'),
-              onTap: () {
-                context.read<AuthViewModel>().logout();
+              onTap: () async {
+              await context.read<AuthViewModel>().logout();
+              if (context.mounted) {
                 Navigator.pushReplacementNamed(context, AppRoutes.login);
-              },
+              }
+            },
             ),
           ],
         ),

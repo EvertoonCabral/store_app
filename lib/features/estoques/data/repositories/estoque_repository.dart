@@ -4,8 +4,8 @@ import 'package:store_app/features/estoques/data/model/estoque_entity.dart';
 import 'package:store_app/features/estoques/data/model/item_estoque_entity.dart';
 
 abstract class EstoqueRepository {
-  Future<List<EstoqueEntity>> getEstoques(String token);
-  Future<void> criarEstoque(String token, EstoqueCreateDto request);
-  Future<EstoqueDetailEntity> getEstoqueById(String token, int id);
-  Future<List<ItemEstoqueEntity>> getItensEstoque(String token, int estoqueId);
+  Future<List<EstoqueEntity>> getEstoques();
+  Future<void> criarEstoque(EstoqueCreateDto request);
+  Future<EstoqueDetailEntity> getEstoqueById(int id);
+  Future<List<ItemEstoqueEntity>> getItensEstoque(int estoqueId);
 }

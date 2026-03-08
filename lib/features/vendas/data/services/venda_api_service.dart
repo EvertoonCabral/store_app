@@ -4,13 +4,12 @@ import 'package:store_app/features/vendas/data/model/venda_detail.dart';
 import 'package:store_app/features/vendas/data/model/venda_entity.dart';
 
 class VendaApiService {
-  HttpClient client;
+  final HttpClient client;
 
   VendaApiService(this.client);
 
-  Future<List<VendaEntity>> getAllVendas(String token) async {
-    final result = await client.get('api/Venda/ObterVendas',
-        headers: {'Authorization': 'Bearer $token'});
+  Future<List<VendaEntity>> getAllVendas() async {
+    final result = await client.get('api/Venda/ObterVendas');
     final data = client.decode(result);
     final list = data as List<dynamic>;
     return list
@@ -18,22 +17,15 @@ class VendaApiService {
         .toList();
   }
 
-  Future<VendaDetailEntity> getVenda(int id, String token) async {
-    final result = await client.get('api/Venda/ObterVendaPorId/$id',
-        headers: {'Authorization': 'Bearer $token'});
-
+  Future<VendaDetailEntity> getVenda(int id) async {
+    final result = await client.get('api/Venda/ObterVendaPorId/$id');
     final data = client.decode(result) as Map<String, dynamic>;
-
     return VendaDetailEntity.fromMap(data);
   }
 
-  Future<void> cadastrarVenda(String token, VendaRequestModel request) async {
+  Future<void> cadastrarVenda(VendaRequestModel request) async {
     final result = await client.post(
       'api/Venda/CadastrarVenda',
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
       body: request.toJson(),
     );
 
@@ -48,11 +40,8 @@ class VendaApiService {
     }
   }
 
-  Future<bool> deleteVenda(int id, String token) async {
-    await client.delete(
-      'api/Venda/DeletarVenda/$id',
-      headers: {'Authorization': 'Bearer $token'},
-    );
+  Future<bool> deleteVenda(int id) async {
+    await client.delete('api/Venda/DeletarVenda/$id');
     return true;
   }
 }

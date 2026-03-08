@@ -5,27 +5,27 @@ import 'package:store_app/features/vendas/data/repository/venda_repository.dart'
 import 'package:store_app/features/vendas/data/services/venda_api_service.dart';
 
 class VendaRepositoryImpl implements VendaRepository {
-  VendaApiService api;
+  final VendaApiService api;
 
   VendaRepositoryImpl(this.api);
 
   @override
-  Future<List<VendaEntity>> getAllVendas(String token) {
-    return api.getAllVendas(token);
+  Future<List<VendaEntity>> getAllVendas() {
+    return api.getAllVendas();
   }
 
   @override
-  Future<VendaDetailEntity> getVendaByid(String token, int id) {
-    return api.getVenda(id, token);
+  Future<VendaDetailEntity> getVendaByid(int id) {
+    return api.getVenda(id);
   }
 
   @override
-  Future<void> cadastrarVenda(String token, VendaRequestModel venda) async {
-    return await api.cadastrarVenda(token, venda);
+  Future<void> cadastrarVenda(VendaRequestModel venda) async {
+    return await api.cadastrarVenda(venda);
   }
 
   @override
-  Future<bool> deleteVenda(String token, int id) {
-    return api.deleteVenda(id, token);
+  Future<bool> deleteVenda(int id) {
+    return api.deleteVenda(id);
   }
 }

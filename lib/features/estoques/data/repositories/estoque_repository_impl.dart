@@ -11,23 +11,22 @@ class EstoqueRepositoryImpl extends EstoqueRepository {
   EstoqueRepositoryImpl(this.apiService);
 
   @override
-  Future<List<EstoqueEntity>> getEstoques(String token) async {
-    return await apiService.getAllEstoques(token);
+  Future<List<EstoqueEntity>> getEstoques() async {
+    return await apiService.getAllEstoques();
   }
 
   @override
-  Future<void> criarEstoque(String token, EstoqueCreateDto request) async {
-    await apiService.criarEstoque(token, request);
+  Future<void> criarEstoque(EstoqueCreateDto request) async {
+    await apiService.criarEstoque(request);
   }
 
   @override
-  Future<EstoqueDetailEntity> getEstoqueById(String token, int id) async {
-    return await apiService.getEstoqueById(token, id);
+  Future<EstoqueDetailEntity> getEstoqueById(int id) async {
+    return await apiService.getEstoqueById(id);
   }
 
   @override
-  Future<List<ItemEstoqueEntity>> getItensEstoque(
-      String token, int estoqueId) async {
-    return await apiService.getItensEstoque(token, estoqueId);
+  Future<List<ItemEstoqueEntity>> getItensEstoque(int estoqueId) async {
+    return await apiService.getItensEstoque(estoqueId);
   }
 }

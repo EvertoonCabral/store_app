@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:store_app/core/di/injection.dart';
 import 'package:store_app/core/config/app_routes.dart';
 import 'package:store_app/core/config/app_theme.dart';
+import 'package:store_app/core/network/http_client.dart';
+import 'package:store_app/core/token_store.dart';
 
 import 'package:store_app/features/login/presentation/viewmodel/auth_viewmodel.dart';
 import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
@@ -20,94 +22,60 @@ import 'package:store_app/features/estoques/data/repositories/estoque_repository
 import 'package:store_app/features/vendas/data/repository/venda_repository.dart';
 import 'package:store_app/features/login/data/repositories/auth_repository.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
+
+  // Quando a API retornar 401, força logout e redireciona para login.
+  getIt<HttpClient>().onUnauthorized = () {
+    final context = navigatorKey.currentContext;
+    if (context != null) {
+      context.read<AuthViewModel>().forceLogout();
+    }
+    navigatorKey.currentState?.pushNamedAndRemoveUntil(
+      AppRoutes.login,
+      (route) => false,
+    );
+  };
 
   runApp(
     MultiProvider(
       providers: [
-        // 1) AuthViewModel: criado UMA vez só
+        // AuthViewModel: instância única para todo o app
         ChangeNotifierProvider<AuthViewModel>(
-          create: (_) => AuthViewModel(getIt<AuthRepository>()),
-        ),
-
-        // 2) ClienteListViewModel: disponível globalmente
-        ChangeNotifierProxyProvider<AuthViewModel, ClienteListViewModel>(
-          create: (context) => ClienteListViewModel(
-            getIt<ClientesRepository>(),
-            context.read<AuthViewModel>(),
+          create: (_) => AuthViewModel(
+            getIt<AuthRepository>(),
+            getIt<TokenStore>(),
           ),
-          update: (context, authVm, previous) =>
-              previous ??
-              ClienteListViewModel(getIt<ClientesRepository>(), authVm),
         ),
 
-        // 3) ProdutoListViewmodel
-        ChangeNotifierProxyProvider<AuthViewModel, ProdutoListViewmodel>(
-          create: (context) => ProdutoListViewmodel(
-            getIt<ProdutoRepository>(),
-            context.read<AuthViewModel>(),
-          ),
-          update: (context, authVm, previous) =>
-              previous ??
-              ProdutoListViewmodel(getIt<ProdutoRepository>(), authVm),
+        // Os demais ViewModels não dependem mais de AuthViewModel —
+        // o token é injetado automaticamente pelo HttpClient via TokenStore.
+        ChangeNotifierProvider<ClienteListViewModel>(
+          create: (_) => ClienteListViewModel(getIt<ClientesRepository>()),
         ),
-
-        // 4) EstoqueViewmodel
-        ChangeNotifierProxyProvider<AuthViewModel, EstoqueViewmodel>(
-          create: (context) => EstoqueViewmodel(
-            getIt<EstoqueRepository>(),
-            context.read<AuthViewModel>(),
-          ),
-          update: (context, authVm, previous) =>
-              previous ?? EstoqueViewmodel(getIt<EstoqueRepository>(), authVm),
+        ChangeNotifierProvider<ProdutoListViewmodel>(
+          create: (_) => ProdutoListViewmodel(getIt<ProdutoRepository>()),
         ),
-
-        // 5) EstoqueDetailViewmodel
-        ChangeNotifierProxyProvider<AuthViewModel, EstoqueDetailViewmodel>(
-          create: (context) => EstoqueDetailViewmodel(
+        ChangeNotifierProvider<ProdutoDetailViewmodel>(
+          create: (_) => ProdutoDetailViewmodel(getIt<ProdutoRepository>()),
+        ),
+        ChangeNotifierProvider<EstoqueViewmodel>(
+          create: (_) => EstoqueViewmodel(getIt<EstoqueRepository>()),
+        ),
+        ChangeNotifierProvider<EstoqueDetailViewmodel>(
+          create: (_) => EstoqueDetailViewmodel(
             getIt<EstoqueRepository>(),
             getIt<ProdutoRepository>(),
-            context.read<AuthViewModel>(),
           ),
-          update: (context, authVm, previous) =>
-              previous ??
-              EstoqueDetailViewmodel(
-                getIt<EstoqueRepository>(),
-                getIt<ProdutoRepository>(),
-                authVm,
-              ),
         ),
-
-        // 6) ProdutoDetailViewmodel
-        ChangeNotifierProxyProvider<AuthViewModel, ProdutoDetailViewmodel>(
-          create: (context) => ProdutoDetailViewmodel(
-            getIt<ProdutoRepository>(),
-            context.read<AuthViewModel>(),
-          ),
-          update: (context, authVm, previous) =>
-              previous ??
-              ProdutoDetailViewmodel(getIt<ProdutoRepository>(), authVm),
+        ChangeNotifierProvider<VendasListViewmodel>(
+          create: (_) => VendasListViewmodel(getIt<VendaRepository>()),
         ),
-
-        // 7) VendasListViewmodel
-        ChangeNotifierProxyProvider<AuthViewModel, VendasListViewmodel>(
-          create: (context) => VendasListViewmodel(
-            getIt<VendaRepository>(),
-            context.read<AuthViewModel>(),
-          ),
-          update: (context, authVm, previous) =>
-              previous ?? VendasListViewmodel(getIt<VendaRepository>(), authVm),
-        ),
-        // 8) VendaCadastroViewmodel
-        ChangeNotifierProxyProvider<AuthViewModel, VendaCadastroViewmodel>(
-          create: (context) => VendaCadastroViewmodel(
-            getIt<VendaRepository>(),
-            context.read<AuthViewModel>(),
-          ),
-          update: (context, authVm, previous) =>
-              previous ??
-              VendaCadastroViewmodel(getIt<VendaRepository>(), authVm),
+        ChangeNotifierProvider<VendaCadastroViewmodel>(
+          create: (_) => VendaCadastroViewmodel(getIt<VendaRepository>()),
         ),
       ],
       child: const PerfumeStoreApp(),
@@ -123,7 +91,8 @@ class PerfumeStoreApp extends StatelessWidget {
     return MaterialApp(
       title: 'Perfume Store',
       theme: AppTheme.light,
-      initialRoute: '/login',
+      navigatorKey: navigatorKey,
+      initialRoute: AppRoutes.login,
       routes: AppRoutes.routes,
       onGenerateRoute: AppRoutes.onGenerateRoute,
     );

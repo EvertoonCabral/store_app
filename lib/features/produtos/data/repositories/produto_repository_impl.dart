@@ -10,9 +10,9 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
   ProdutoRepositoryImpl(this.api);
 
   @override
-  Future<bool> postProdutos(ProdutoEntity request, String token) async {
+  Future<bool> postProdutos(ProdutoEntity request) async {
     try {
-      await api.createProduto(request.toMap(), token);
+      await api.createProduto(request.toMap());
       return true;
     } catch (e) {
       return false;
@@ -20,10 +20,9 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
   }
 
   @override
-  Future<bool> updateProduto(
-      int id, ProdutoEntity request, String token) async {
+  Future<bool> updateProduto(int id, ProdutoEntity request) async {
     try {
-      await api.updateProduto(id, request.toMap(), token);
+      await api.updateProduto(id, request.toMap());
       return true;
     } catch (e) {
       return false;
@@ -31,17 +30,17 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
   }
 
   @override
-  Future<List<ProdutoEntity>> getProdutos(String token) {
-    return api.getAllProdutos(token);
+  Future<List<ProdutoEntity>> getProdutos() {
+    return api.getAllProdutos();
   }
 
   @override
-  Future<ProdutoEntity> getProdutoById(int? id, String token) {
-    return api.getProdutoById(id, token);
+  Future<ProdutoEntity> getProdutoById(int? id) {
+    return api.getProdutoById(id);
   }
 
   @override
-  Future<bool> deleteProduto(int id, String token) {
-    return api.deleteProduto(id, token);
+  Future<bool> deleteProduto(int id) {
+    return api.deleteProduto(id);
   }
 }

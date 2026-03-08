@@ -7,16 +7,16 @@ import '../models/cliente_filtro_dto.dart';
 
 class ClientesRepositoryImpl implements ClientesRepository {
   final ClienteApiService api;
+
   ClientesRepositoryImpl(this.api);
 
   @override
-  Future<PagedResult<ClienteDto>> getClientes(
-      ClienteFiltroDto filtros, String token) {
-    return api.getClientes(filtros, token);
+  Future<PagedResult<ClienteDto>> getClientes(ClienteFiltroDto filtros) {
+    return api.getClientes(filtros);
   }
 
   @override
-  Future<ClienteDto> getCliente(int id, String token) {
-    return api.getCliente(id, token);
+  Future<ClienteDto> getCliente(int id) {
+    return api.getCliente(id);
   }
 }

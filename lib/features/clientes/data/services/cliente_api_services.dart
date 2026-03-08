@@ -8,23 +8,15 @@ class ClienteApiService {
 
   ClienteApiService(this.client);
 
-  Future<PagedResult<ClienteDto>> getClientes(
-      ClienteFiltroDto filtros, String token) async {
-    final result = await client.get('api/Cliente',
-        query: filtros.toQuery(), headers: {'Authorization': 'Bearer $token'});
+  Future<PagedResult<ClienteDto>> getClientes(ClienteFiltroDto filtros) async {
+    final result = await client.get('api/Cliente', query: filtros.toQuery());
     final data = client.decode(result) as Map<String, dynamic>;
-    return PagedResult.fromJson(
-      data,
-      (json) => ClienteDto.fromJson(json),
-    );
+    return PagedResult.fromJson(data, (json) => ClienteDto.fromJson(json));
   }
 
-  Future<ClienteDto> getCliente(int id, String token) async {
-    final result = await client
-        .get('api/Cliente/$id', headers: {'Authorization': 'Bearer $token'});
-
+  Future<ClienteDto> getCliente(int id) async {
+    final result = await client.get('api/Cliente/$id');
     final data = client.decode(result) as Map<String, dynamic>;
-
     return ClienteDto.fromJson(data);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_app/core/widgets/auth_guard.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_add_page.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_list_page.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_update_page.dart';
@@ -13,7 +14,6 @@ import 'package:store_app/features/vendas/presentation/views/vendas_list_page.da
 import '../../features/home/presentation/home_page.dart';
 
 class AppRoutes {
-  // Constantes para as rotas
   static const String home = '/home';
   static const String login = '/login';
   static const String produtos = '/produtos';
@@ -27,23 +27,23 @@ class AppRoutes {
   static const String cadastrarVenda = '/cadastrar-venda';
 
   static Map<String, WidgetBuilder> routes = {
-    home: (_) => const HomePage(),
     login: (_) => const LoginPage(),
-    produtos: (_) => const ProdutosListPage(),
-    cadastrarProduto: (_) => const ProdutoAddPage(),
-    clientes: (_) => const ClientesListPage(),
-    cadastrarCliente: (_) => const ClientesAddPage(),
-    editarCliente: (_) => const ClientesUpdatePage(),
-    estoques: (_) => const EstoqueListPage(),
-    vendas: (_) => const VendasListPage(),
-    cadastrarVenda: (_) => const VendaCadastroPage(),
+    home: (_) => const AuthGuard(child: HomePage()),
+    produtos: (_) => const AuthGuard(child: ProdutosListPage()),
+    cadastrarProduto: (_) => const AuthGuard(child: ProdutoAddPage()),
+    clientes: (_) => const AuthGuard(child: ClientesListPage()),
+    cadastrarCliente: (_) => const AuthGuard(child: ClientesAddPage()),
+    editarCliente: (_) => const AuthGuard(child: ClientesUpdatePage()),
+    estoques: (_) => const AuthGuard(child: EstoqueListPage()),
+    vendas: (_) => const AuthGuard(child: VendasListPage()),
+    cadastrarVenda: (_) => const AuthGuard(child: VendaCadastroPage()),
   };
 
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     if (settings.name == editarProduto) {
       final produto = settings.arguments as ProdutoEntity;
       return MaterialPageRoute(
-        builder: (_) => ProdutoUpdatePage(produto: produto),
+        builder: (_) => AuthGuard(child: ProdutoUpdatePage(produto: produto)),
       );
     }
     return null;

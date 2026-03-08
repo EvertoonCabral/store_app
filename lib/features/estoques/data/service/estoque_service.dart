@@ -9,51 +9,30 @@ class EstoqueApiService {
 
   EstoqueApiService(this.client);
 
-  Future<List<EstoqueEntity>> getAllEstoques(String token) async {
-    final result = await client.get(
-      'api/Estoque',
-      headers: {'Authorization': 'Bearer $token'},
-    );
-
+  Future<List<EstoqueEntity>> getAllEstoques() async {
+    final result = await client.get('api/Estoque');
     final data = client.decode(result);
     final list = data as List<dynamic>;
-
     return list
         .map((json) => EstoqueEntity.fromMap(json as Map<String, dynamic>))
         .toList();
   }
 
-  Future<void> criarEstoque(String token, EstoqueCreateDto request) async {
-    await client.post(
-      'api/Estoque',
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-      body: request.toMap(),
-    );
+  Future<void> criarEstoque(EstoqueCreateDto request) async {
+    await client.post('api/Estoque', body: request.toMap());
   }
 
-  Future<EstoqueDetailEntity> getEstoqueById(String token, int id) async {
-    final result = await client.get(
-      'api/Estoque/$id',
-      headers: {'Authorization': 'Bearer $token'},
-    );
-
+  Future<EstoqueDetailEntity> getEstoqueById(int id) async {
+    final result = await client.get('api/Estoque/$id');
     final data = client.decode(result);
     return EstoqueDetailEntity.fromMap(data as Map<String, dynamic>);
   }
 
-  Future<List<ItemEstoqueEntity>> getItensEstoque(
-      String token, int estoqueId) async {
-    final result = await client.get(
-      'api/Estoque/estoque/$estoqueId/ObterItensEstoque',
-      headers: {'Authorization': 'Bearer $token'},
-    );
-
+  Future<List<ItemEstoqueEntity>> getItensEstoque(int estoqueId) async {
+    final result = await client
+        .get('api/Estoque/estoque/$estoqueId/ObterItensEstoque');
     final data = client.decode(result);
     final list = data as List<dynamic>;
-
     return list
         .map((json) => ItemEstoqueEntity.fromMap(json as Map<String, dynamic>))
         .toList();

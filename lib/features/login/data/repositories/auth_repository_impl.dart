@@ -13,4 +13,7 @@ class AuthRepositoryImpl implements AuthRepository {
     final request = LoginRequest(email: email, senha: senha);
     return _api.login(request);
   }
+
+  @override
+  Future<void> logout(String token) => _api.logout(token);
 }

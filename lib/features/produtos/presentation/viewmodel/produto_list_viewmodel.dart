@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:store_app/features/login/presentation/viewmodel/auth_viewmodel.dart';
 import 'package:store_app/features/produtos/data/models/produto_entity.dart';
 import 'package:store_app/features/produtos/data/repositories/produto_repository.dart';
 
 class ProdutoListViewmodel extends ChangeNotifier {
   final ProdutoRepository repository;
-  final AuthViewModel authViewModel;
 
-  ProdutoListViewmodel(this.repository, this.authViewModel);
+  ProdutoListViewmodel(this.repository);
 
   bool isLoading = false;
   String? error;
@@ -15,20 +13,12 @@ class ProdutoListViewmodel extends ChangeNotifier {
   ProdutoEntity? produtoSelecionado;
 
   Future<void> cadastrarProduto(ProdutoEntity produto) async {
-    final token = authViewModel.token;
-
-    if (token == null || token.isEmpty) {
-      error = 'Usuário não autenticado';
-      notifyListeners();
-      return;
-    }
-
     try {
       isLoading = true;
       error = null;
       notifyListeners();
 
-      await repository.postProdutos(produto, token);
+      await repository.postProdutos(produto);
     } catch (e) {
       error = 'Erro ao cadastrar produto';
       rethrow;
@@ -39,19 +29,12 @@ class ProdutoListViewmodel extends ChangeNotifier {
   }
 
   Future<void> retornaProdutos() async {
-    final token = authViewModel.token;
-    if (token == null || token.isEmpty) {
-      error = 'Usuário não autenticado';
-      notifyListeners();
-      return;
-    }
-
     try {
       isLoading = true;
       error = null;
       notifyListeners();
 
-      items = await repository.getProdutos(token);
+      items = await repository.getProdutos();
     } catch (e) {
       error = 'Erro ao carregar produtos';
     } finally {
@@ -61,28 +44,16 @@ class ProdutoListViewmodel extends ChangeNotifier {
   }
 
   Future<ProdutoEntity?> retornaProdutoPorId(int id) async {
-    final token = authViewModel.token;
-    if (token == null || token.isEmpty) {
-      return null;
-    }
-
     try {
-      return await repository.getProdutoById(id, token);
+      return await repository.getProdutoById(id);
     } catch (e) {
       return null;
     }
   }
 
   Future<bool> deletarProduto(int id) async {
-    final token = authViewModel.token;
-    if (token == null || token.isEmpty) {
-      error = 'Usuário não autenticado';
-      notifyListeners();
-      return false;
-    }
-
     try {
-      final ok = await repository.deleteProduto(id, token);
+      final ok = await repository.deleteProduto(id);
       if (ok) {
         items.removeWhere((p) => p.id == id);
         notifyListeners();

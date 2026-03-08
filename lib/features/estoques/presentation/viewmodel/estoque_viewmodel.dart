@@ -2,32 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:store_app/features/estoques/data/model/estoque_create_dto.dart';
 import 'package:store_app/features/estoques/data/model/estoque_entity.dart';
 import 'package:store_app/features/estoques/data/repositories/estoque_repository.dart';
-import 'package:store_app/features/login/presentation/viewmodel/auth_viewmodel.dart';
 
 class EstoqueViewmodel extends ChangeNotifier {
   final EstoqueRepository estoqueRepository;
-  final AuthViewModel authViewModel;
 
-  EstoqueViewmodel(this.estoqueRepository, this.authViewModel);
+  EstoqueViewmodel(this.estoqueRepository);
 
   bool isLoading = false;
   String? error;
   List<EstoqueEntity> items = [];
 
   Future<void> retornaEstoques() async {
-    final token = authViewModel.token;
-    if (token == null || token.isEmpty) {
-      error = 'Usuário não autenticado';
-      notifyListeners();
-      return;
-    }
-
     try {
       isLoading = true;
       error = null;
       notifyListeners();
 
-      items = await estoqueRepository.getEstoques(token);
+      items = await estoqueRepository.getEstoques();
     } catch (e) {
       error = 'Erro ao carregar estoques';
     } finally {
@@ -37,13 +28,6 @@ class EstoqueViewmodel extends ChangeNotifier {
   }
 
   Future<bool> criarEstoque(String nome, String descricao) async {
-    final token = authViewModel.token;
-    if (token == null || token.isEmpty) {
-      error = 'Usuário não autenticado';
-      notifyListeners();
-      return false;
-    }
-
     final request = EstoqueCreateDto(
       nome: nome.trim(),
       descricao: descricao.trim(),
@@ -55,7 +39,7 @@ class EstoqueViewmodel extends ChangeNotifier {
       error = null;
       notifyListeners();
 
-      await estoqueRepository.criarEstoque(token, request);
+      await estoqueRepository.criarEstoque(request);
       await retornaEstoques();
       return true;
     } catch (e) {

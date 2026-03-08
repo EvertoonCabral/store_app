@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:store_app/core/network/http_client.dart';
+import 'package:store_app/core/token_store.dart';
 
 import 'package:store_app/features/clientes/data/services/cliente_api_services.dart';
 import 'package:store_app/features/clientes/data/repositories/cliente_repository_impl.dart';
@@ -25,13 +26,16 @@ import 'package:store_app/features/login/data/repositories/auth_repository_impl.
 
 final GetIt getIt = GetIt.instance;
 
-/// Configure and register app-wide dependencies.
 void configureDependencies({String? baseUrl}) {
   if (getIt.isRegistered<HttpClient>()) return;
+
+  final tokenStore = TokenStore();
+  getIt.registerSingleton<TokenStore>(tokenStore);
 
   final httpClient = HttpClient(
     baseUrl: baseUrl ?? 'https://burghal-klara-nonextraneously.ngrok-free.dev/',
     client: http.Client(),
+    tokenStore: tokenStore,
   );
 
   // Core

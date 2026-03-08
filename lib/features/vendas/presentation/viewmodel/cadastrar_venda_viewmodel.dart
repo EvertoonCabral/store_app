@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:store_app/features/clientes/data/models/cliente_entity.dart';
 import 'package:store_app/features/estoques/data/model/estoque_entity.dart';
-import 'package:store_app/features/login/presentation/viewmodel/auth_viewmodel.dart';
 import 'package:store_app/features/produtos/data/models/produto_entity.dart';
 import 'package:store_app/features/vendas/data/model/create_item_venda_request.dart';
 import 'package:store_app/features/vendas/data/model/create_venda_request.dart';
@@ -23,9 +22,8 @@ class ItemVendaTemp {
 
 class VendaCadastroViewmodel extends ChangeNotifier {
   final VendaRepository repository;
-  final AuthViewModel authVm;
 
-  VendaCadastroViewmodel(this.repository, this.authVm);
+  VendaCadastroViewmodel(this.repository);
 
   bool isLoading = false;
   String? error;
@@ -127,15 +125,6 @@ class VendaCadastroViewmodel extends ChangeNotifier {
       return false;
     }
 
-    final token = authVm.token;
-    if (token == null || token.isEmpty) {
-      error = 'Usuário não autenticado';
-      notifyListeners();
-      return false;
-    }
-
-    final usuario = 'ADMIN';
-
     try {
       isLoading = true;
       error = null;
@@ -153,10 +142,10 @@ class VendaCadastroViewmodel extends ChangeNotifier {
             .toList(),
         desconto: desconto,
         observacoes: observacoes,
-        usuarioVendedor: usuario,
+        usuarioVendedor: 'ADMIN',
       );
 
-      await repository.cadastrarVenda(token, request);
+      await repository.cadastrarVenda(request);
       limpar();
       return true;
     } catch (e) {

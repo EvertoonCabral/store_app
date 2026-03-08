@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:store_app/features/login/presentation/viewmodel/auth_viewmodel.dart';
 import 'package:store_app/features/vendas/data/model/venda_detail.dart';
 import 'package:store_app/features/vendas/data/model/venda_entity.dart';
 import 'package:store_app/features/vendas/data/repository/venda_repository.dart';
 
 class VendasListViewmodel extends ChangeNotifier {
   final VendaRepository repository;
-  final AuthViewModel authVm;
 
-  VendasListViewmodel(
-    this.repository,
-    this.authVm,
-  );
+  VendasListViewmodel(this.repository);
 
   bool isLoading = false;
   String? error;
@@ -19,19 +14,12 @@ class VendasListViewmodel extends ChangeNotifier {
   VendaEntity? vendaSelecionada;
 
   Future<void> retornaVendas() async {
-    final token = authVm.token;
-    if (token == null || token.isEmpty) {
-      error = 'Usuário não autenticado';
-      notifyListeners();
-      return;
-    }
-
     try {
       isLoading = true;
       error = null;
       notifyListeners();
 
-      items = await repository.getAllVendas(token);
+      items = await repository.getAllVendas();
     } catch (e) {
       error = 'Erro ao carregar vendas';
     } finally {
@@ -41,28 +29,16 @@ class VendasListViewmodel extends ChangeNotifier {
   }
 
   Future<VendaDetailEntity?> retornaVenda(int id) async {
-    final token = authVm.token;
-    if (token == null || token.isEmpty) {
-      return null;
-    }
-
     try {
-      return await repository.getVendaByid(token, id);
+      return await repository.getVendaByid(id);
     } catch (e) {
       return null;
     }
   }
 
   Future<bool> deletarVenda(int id) async {
-    final token = authVm.token;
-    if (token == null || token.isEmpty) {
-      error = 'Usuário não autenticado';
-      notifyListeners();
-      return false;
-    }
-
     try {
-      final ok = await repository.deleteVenda(token, id);
+      final ok = await repository.deleteVenda(id);
       if (ok) {
         items.removeWhere((v) => v.id == id);
         notifyListeners();
