@@ -29,7 +29,7 @@ class EstoqueViewmodel extends ChangeNotifier {
 
       items = await estoqueRepository.getEstoques(token);
     } catch (e) {
-      error = 'Erro ao carregar produtos';
+      error = 'Erro ao carregar estoques';
     } finally {
       isLoading = false;
       notifyListeners();

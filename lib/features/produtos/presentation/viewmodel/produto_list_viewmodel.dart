@@ -73,6 +73,28 @@ class ProdutoListViewmodel extends ChangeNotifier {
     }
   }
 
+  Future<bool> deletarProduto(int id) async {
+    final token = authViewModel.token;
+    if (token == null || token.isEmpty) {
+      error = 'Usuário não autenticado';
+      notifyListeners();
+      return false;
+    }
+
+    try {
+      final ok = await repository.deleteProduto(id, token);
+      if (ok) {
+        items.removeWhere((p) => p.id == id);
+        notifyListeners();
+      }
+      return ok;
+    } catch (e) {
+      error = 'Erro ao excluir produto';
+      notifyListeners();
+      return false;
+    }
+  }
+
   String getNomeProduto(int produtoId) {
     final produto = items.firstWhere(
       (p) => p.id == produtoId,

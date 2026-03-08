@@ -20,7 +20,7 @@ class _VendasListPageState extends State<VendasListPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<VendasListViewmodel>().retornaProdutos();
+      context.read<VendasListViewmodel>().retornaVendas();
     });
   }
 
@@ -65,18 +65,26 @@ class _VendasListPageState extends State<VendasListPage> {
                 },
                 onDelete: () async {
                   final messenger = ScaffoldMessenger.of(context);
+                  final vm = context.read<VendasListViewmodel>();
                   final confirmed = await showConfirmDialog(
                     context,
-                    title: 'Confirmar excluão',
+                    title: 'Confirmar exclusão',
                     content:
                         'Deseja realmente excluir a venda #${vendaItem.id}?',
                     confirmLabel: 'Excluir',
                     icon: Icons.delete_outline,
                   );
                   if (confirmed) {
+                    final ok = await vm.deletarVenda(vendaItem.id);
                     messenger.showSnackBar(
                       SnackBar(
-                          content: Text('Venda #${vendaItem.id} excluída')),
+                        content: Text(
+                          ok
+                              ? 'Venda #${vendaItem.id} excluída'
+                              : vm.error ?? 'Erro ao excluir venda',
+                        ),
+                        backgroundColor: ok ? null : Colors.red,
+                      ),
                     );
                   }
                 },
@@ -93,7 +101,7 @@ class _VendasListPageState extends State<VendasListPage> {
             AppRoutes.cadastrarVenda,
           );
           if (resultado != null && mounted) {
-            vm.retornaProdutos();
+            vm.retornaVendas();
           }
         },
         child: const Icon(Icons.add),

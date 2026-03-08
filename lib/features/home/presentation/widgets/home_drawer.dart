@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:store_app/core/config/app_routes.dart';
+import 'package:store_app/features/login/presentation/viewmodel/auth_viewmodel.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
@@ -25,33 +28,41 @@ class HomeDrawer extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.home),
               title: const Text('Home'),
-              onTap: () => Navigator.pushReplacementNamed(context, '/'),
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, AppRoutes.home),
             ),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.inventory_2),
               title: const Text('Produtos'),
-              onTap: () => Navigator.pushReplacementNamed(context, '/produtos'),
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, AppRoutes.produtos),
             ),
             ListTile(
               leading: const Icon(Icons.shopping_cart),
               title: const Text('Vendas'),
-              onTap: () => Navigator.pushReplacementNamed(context, '/vendas'),
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, AppRoutes.vendas),
             ),
             ListTile(
               leading: const Icon(Icons.warehouse),
               title: const Text('Estoque'),
-              onTap: () => Navigator.pushReplacementNamed(context, '/estoques'),
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, AppRoutes.estoques),
             ),
             ListTile(
               leading: const Icon(Icons.people),
               title: const Text('Clientes'),
-              onTap: () => Navigator.pushReplacementNamed(context, '/clientes'),
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, AppRoutes.clientes),
             ),
             ListTile(
               leading: const Icon(Icons.exit_to_app),
               title: const Text('Sair'),
-              onTap: () => Navigator.pushReplacementNamed(context, '/login'),
+              onTap: () {
+                context.read<AuthViewModel>().logout();
+                Navigator.pushReplacementNamed(context, AppRoutes.login);
+              },
             ),
           ],
         ),

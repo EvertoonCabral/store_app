@@ -71,17 +71,25 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
               },
               onDelete: () async {
                 final messenger = ScaffoldMessenger.of(context);
+                final vm = context.read<ProdutoListViewmodel>();
                 final confirmed = await showConfirmDialog(
                   context,
-                  title: 'Confirmar excluão',
+                  title: 'Confirmar exclusão',
                   content: 'Deseja realmente excluir "${produtoItem.nome}"?',
                   confirmLabel: 'Excluir',
                   icon: Icons.delete_outline,
                 );
                 if (confirmed) {
-                  // context.read<ProdutoListViewmodel>().deletarProduto(produtoItem.id);
+                  final ok = await vm.deletarProduto(produtoItem.id!);
                   messenger.showSnackBar(
-                    SnackBar(content: Text('${produtoItem.nome} excluído')),
+                    SnackBar(
+                      content: Text(
+                        ok
+                            ? '${produtoItem.nome} excluído'
+                            : vm.error ?? 'Erro ao excluir produto',
+                      ),
+                      backgroundColor: ok ? null : Colors.red,
+                    ),
                   );
                 }
               },

@@ -47,4 +47,12 @@ class VendaApiService {
       }
     }
   }
+
+  Future<bool> deleteVenda(int id, String token) async {
+    await client.delete(
+      'api/Venda/DeletarVenda/$id',
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    return true;
+  }
 }

@@ -18,7 +18,7 @@ class VendasListViewmodel extends ChangeNotifier {
   List<VendaEntity> items = [];
   VendaEntity? vendaSelecionada;
 
-  Future<void> retornaProdutos() async {
+  Future<void> retornaVendas() async {
     final token = authVm.token;
     if (token == null || token.isEmpty) {
       error = 'Usuário não autenticado';
@@ -33,7 +33,7 @@ class VendasListViewmodel extends ChangeNotifier {
 
       items = await repository.getAllVendas(token);
     } catch (e) {
-      error = 'Erro ao carregar produtos';
+      error = 'Erro ao carregar vendas';
     } finally {
       isLoading = false;
       notifyListeners();
@@ -50,6 +50,28 @@ class VendasListViewmodel extends ChangeNotifier {
       return await repository.getVendaByid(token, id);
     } catch (e) {
       return null;
+    }
+  }
+
+  Future<bool> deletarVenda(int id) async {
+    final token = authVm.token;
+    if (token == null || token.isEmpty) {
+      error = 'Usuário não autenticado';
+      notifyListeners();
+      return false;
+    }
+
+    try {
+      final ok = await repository.deleteVenda(token, id);
+      if (ok) {
+        items.removeWhere((v) => v.id == id);
+        notifyListeners();
+      }
+      return ok;
+    } catch (e) {
+      error = 'Erro ao excluir venda';
+      notifyListeners();
+      return false;
     }
   }
 }

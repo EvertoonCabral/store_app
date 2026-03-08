@@ -6,4 +6,5 @@ abstract class VendaRepository {
   Future<List<VendaEntity>> getAllVendas(String token);
   Future<VendaDetailEntity> getVendaByid(String token, int id);
   Future<void> cadastrarVenda(String token, VendaRequestModel request);
+  Future<bool> deleteVenda(String token, int id);
 }

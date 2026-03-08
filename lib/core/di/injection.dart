@@ -20,6 +20,7 @@ import 'package:store_app/features/vendas/data/repository/venda_repository_impl.
 import 'package:store_app/features/vendas/data/repository/venda_repository.dart';
 
 import 'package:store_app/features/login/data/service/auth_api_service.dart';
+import 'package:store_app/features/login/data/repositories/auth_repository.dart';
 import 'package:store_app/features/login/data/repositories/auth_repository_impl.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -39,7 +40,7 @@ void configureDependencies({String? baseUrl}) {
   // Login / Auth
   getIt.registerLazySingleton<AuthApiService>(
       () => AuthApiService(getIt<HttpClient>()));
-  getIt.registerLazySingleton<AuthRepositoryImpl>(
+  getIt.registerLazySingleton<AuthRepository>(
       () => AuthRepositoryImpl(getIt<AuthApiService>()));
 
   // Clientes

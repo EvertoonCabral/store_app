@@ -23,4 +23,9 @@ class VendaRepositoryImpl implements VendaRepository {
   Future<void> cadastrarVenda(String token, VendaRequestModel venda) async {
     return await api.cadastrarVenda(token, venda);
   }
+
+  @override
+  Future<bool> deleteVenda(String token, int id) {
+    return api.deleteVenda(id, token);
+  }
 }

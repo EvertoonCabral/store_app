@@ -18,7 +18,7 @@ import 'package:store_app/features/clientes/data/repositories/cliente_repository
 import 'package:store_app/features/produtos/data/repositories/produto_repository.dart';
 import 'package:store_app/features/estoques/data/repositories/estoque_repository.dart';
 import 'package:store_app/features/vendas/data/repository/venda_repository.dart';
-import 'package:store_app/features/login/data/repositories/auth_repository_impl.dart';
+import 'package:store_app/features/login/data/repositories/auth_repository.dart';
 
 void main() {
   configureDependencies();
@@ -28,7 +28,7 @@ void main() {
       providers: [
         // 1) AuthViewModel: criado UMA vez só
         ChangeNotifierProvider<AuthViewModel>(
-          create: (_) => AuthViewModel(getIt<AuthRepositoryImpl>()),
+          create: (_) => AuthViewModel(getIt<AuthRepository>()),
         ),
 
         // 2) ClienteListViewModel: disponível globalmente
