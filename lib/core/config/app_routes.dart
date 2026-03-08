@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_add_page.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_list_page.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_update_page.dart';
-import 'package:store_app/features/estoques/presentation/view/estoque_list_page.dart';
-import 'package:store_app/features/login/presentation/view/login_page.dart';
+import 'package:store_app/features/estoques/presentation/views/estoque_list_page.dart';
+import 'package:store_app/features/login/presentation/views/login_page.dart';
 import 'package:store_app/features/produtos/data/models/produto_entity.dart';
 import 'package:store_app/features/produtos/presentation/views/produto_add_page.dart';
 import 'package:store_app/features/produtos/presentation/views/produto_update_page.dart';
 import 'package:store_app/features/produtos/presentation/views/produtos_list_page.dart';
-import 'package:store_app/features/vendas/presentation/view/venda_create_page.dart';
-import 'package:store_app/features/vendas/presentation/view/vendas_list_page.dart';
+import 'package:store_app/features/vendas/presentation/views/venda_create_page.dart';
+import 'package:store_app/features/vendas/presentation/views/vendas_list_page.dart';
 import '../../features/home/presentation/home_page.dart';
 
 class AppRoutes {

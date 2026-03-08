@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:store_app/features/clientes/data/models/cliente_entity.dart';
@@ -43,7 +43,7 @@ class _VendaCadastroPageState extends State<VendaCadastroPage> {
 
     if (clientes.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Nenhum cliente disponível')),
+        const SnackBar(content: Text('Nenhum cliente dispon├¡vel')),
       );
       return;
     }
@@ -64,7 +64,7 @@ class _VendaCadastroPageState extends State<VendaCadastroPage> {
 
     if (estoques.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Nenhum estoque disponível')),
+        const SnackBar(content: Text('Nenhum estoque dispon├¡vel')),
       );
       return;
     }
@@ -85,7 +85,7 @@ class _VendaCadastroPageState extends State<VendaCadastroPage> {
 
     if (produtos.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Nenhum produto disponível')),
+        const SnackBar(content: Text('Nenhum produto dispon├¡vel')),
       );
       return;
     }
@@ -274,10 +274,10 @@ class _VendaCadastroPageState extends State<VendaCadastroPage> {
                   else
                     ...vm.itens.map((item) => _buildItemCard(item, vm)),
 
-                  // Campos adicionais (só aparecem se tiver itens)
+                  // Campos adicionais (s├│ aparecem se tiver itens)
                   if (vm.podeExibirCampos) ...[
                     const SizedBox(height: 16),
-                    _buildSectionTitle('Informações Adicionais'),
+                    _buildSectionTitle('Informa├º├Áes Adicionais'),
                     const SizedBox(height: 8),
 
                     // Desconto
@@ -301,11 +301,11 @@ class _VendaCadastroPageState extends State<VendaCadastroPage> {
 
                     const SizedBox(height: 12),
 
-                    // Observações
+                    // Observa├º├Áes
                     TextField(
                       controller: _observacoesController,
                       decoration: const InputDecoration(
-                        labelText: 'Observações',
+                        labelText: 'Observa├º├Áes',
                         prefixIcon: Icon(Icons.notes),
                         border: OutlineInputBorder(),
                       ),
@@ -338,7 +338,7 @@ class _VendaCadastroPageState extends State<VendaCadastroPage> {
 
                     const SizedBox(height: 24),
 
-                    // Botão Finalizar
+                    // Bot├úo Finalizar
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -928,7 +928,7 @@ class _ProdutoSelectionDialogState extends State<_ProdutoSelectionDialog> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      'Preço Unitário:',
+                      'Pre├ºo Unit├írio:',
                       style: TextStyle(fontWeight: FontWeight.w600),
                     ),
                     Text(
@@ -962,7 +962,7 @@ class _ProdutoSelectionDialogState extends State<_ProdutoSelectionDialog> {
             final quantidade = int.tryParse(_quantidadeController.text) ?? 1;
             if (quantidade <= 0) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Quantidade inválida')),
+                const SnackBar(content: Text('Quantidade inv├ílida')),
               );
               return;
             }

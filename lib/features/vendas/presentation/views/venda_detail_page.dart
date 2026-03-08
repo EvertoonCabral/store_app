@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:store_app/features/clientes/data/models/cliente_entity.dart';
@@ -26,7 +26,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
   bool _isLoadingCliente = false;
   String? _error;
 
-  // ✅ ADICIONE ESTES GETTERS AQUI (logo após as variáveis de estado)
+  // Ô£à ADICIONE ESTES GETTERS AQUI (logo ap├│s as vari├íveis de estado)
   double get _subtotalItens {
     if (_venda == null) return 0;
 
@@ -39,7 +39,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
   double get _totalVenda {
     return _subtotalItens - (_venda?.desconto ?? 0);
   }
-  // ✅ FIM DOS GETTERS
+  // Ô£à FIM DOS GETTERS
 
   @override
   void initState() {
@@ -60,7 +60,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
       _venda = venda;
       _isLoading = false;
       if (venda == null) {
-        _error = 'Venda não encontrada';
+        _error = 'Venda n├úo encontrada';
       }
     });
 
@@ -111,14 +111,14 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
 
     if (_venda!.status == StatusVenda.finalizada) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Esta venda já está finalizada')),
+        const SnackBar(content: Text('Esta venda j├í est├í finalizada')),
       );
       return;
     }
 
     if (_venda!.status == StatusVenda.cancelada) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Esta venda está cancelada')),
+        const SnackBar(content: Text('Esta venda est├í cancelada')),
       );
       return;
     }
@@ -129,7 +129,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
         title: const Text('Finalizar Venda'),
         content: Text(
           'Deseja realmente finalizar a venda #${_venda!.id}?\n\n'
-          'Valor Total: R\$ ${_totalVenda.toStringAsFixed(2)}', // ✅ AJUSTADO
+          'Valor Total: R\$ ${_totalVenda.toStringAsFixed(2)}', // Ô£à AJUSTADO
         ),
         actions: [
           TextButton(
@@ -139,7 +139,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(dialogContext);
-              // Aqui você chama o método de finalizar do viewmodel
+              // Aqui voc├¬ chama o m├®todo de finalizar do viewmodel
               // context.read<VendasListViewmodel>().finalizarVenda(_venda!.id);
 
               ScaffoldMessenger.of(context).showSnackBar(
@@ -192,7 +192,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
                   ),
                 )
               : _venda == null
-                  ? const Center(child: Text('Venda não encontrada'))
+                  ? const Center(child: Text('Venda n├úo encontrada'))
                   : SingleChildScrollView(
                       padding: const EdgeInsets.all(16),
                       child: Column(
@@ -247,9 +247,9 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
 
                           const SizedBox(height: 16),
 
-                          // Informações da Venda
+                          // Informa├º├Áes da Venda
                           const Text(
-                            'Informações da Venda',
+                            'Informa├º├Áes da Venda',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -283,7 +283,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
 
                           const SizedBox(height: 16),
 
-                          // ✅ ITENS DA VENDA (MOVIDO PARA CIMA)
+                          // Ô£à ITENS DA VENDA (MOVIDO PARA CIMA)
                           const Text(
                             'Itens da Venda',
                             style: TextStyle(
@@ -314,7 +314,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
                               elevation: 2,
                               child: Column(
                                 children: [
-                                  // Cabeçalho da tabela
+                                  // Cabe├ºalho da tabela
                                   Container(
                                     padding: const EdgeInsets.all(12),
                                     decoration: BoxDecoration(
@@ -351,7 +351,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
                                         const Expanded(
                                           flex: 2,
                                           child: Text(
-                                            'Preço Un.',
+                                            'Pre├ºo Un.',
                                             textAlign: TextAlign.right,
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
@@ -455,7 +455,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
 
                           const SizedBox(height: 16),
 
-                          // ✅ VALORES (AGORA ABAIXO DOS ITENS)
+                          // Ô£à VALORES (AGORA ABAIXO DOS ITENS)
                           const Text(
                             'Valores',
                             style: TextStyle(
@@ -473,7 +473,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
                                 children: [
                                   _buildValorRow(
                                     label: 'Subtotal',
-                                    valor: _subtotalItens, // ✅ AJUSTADO
+                                    valor: _subtotalItens, // Ô£à AJUSTADO
                                     isSubtotal: true,
                                   ),
                                   if (_venda!.desconto > 0) ...[
@@ -487,7 +487,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
                                   const Divider(height: 24, thickness: 2),
                                   _buildValorRow(
                                     label: 'Total',
-                                    valor: _totalVenda, // ✅ AJUSTADO
+                                    valor: _totalVenda, // Ô£à AJUSTADO
                                     isTotal: true,
                                   ),
                                 ],
@@ -497,7 +497,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
 
                           const SizedBox(height: 24),
 
-                          // Botão Finalizar Venda
+                          // Bot├úo Finalizar Venda
                           if (_venda!.status == StatusVenda.pendente)
                             SizedBox(
                               width: double.infinity,
@@ -572,7 +572,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
                 ],
               ] else
                 Text(
-                  '#${_venda!.clienteId} - Cliente não encontrado',
+                  '#${_venda!.clienteId} - Cliente n├úo encontrado',
                   style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w600,

@@ -69,7 +69,6 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // LOGO
                   ClipRRect(
                     borderRadius: BorderRadius.circular(6),
                     child: Image.asset(
@@ -80,8 +79,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 12),
-
-                  // TÍTULO
                   Text(
                     'PerfumeStore',
                     style: GoogleFonts.agdasima(
@@ -90,9 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                       color: purple,
                     ),
                   ),
-
                   const SizedBox(height: 24),
-
                   TextFormField(
                     controller: _emailController,
                     textAlign: TextAlign.center,
@@ -130,7 +125,6 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                   const SizedBox(height: 12),
-
                   TextFormField(
                     controller: _senhaController,
                     obscureText: true,
@@ -167,9 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                       return null;
                     },
                   ),
-
                   const SizedBox(height: 16),
-
                   SizedBox(
                     width: double.infinity,
                     height: 50,

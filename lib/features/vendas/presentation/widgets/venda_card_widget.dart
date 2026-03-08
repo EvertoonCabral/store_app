@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:store_app/features/vendas/data/model/venda_entity.dart';
 import 'package:store_app/features/vendas/data/model/status_venda.dart';
-import 'package:store_app/features/vendas/presentation/view/venda_detail_page.dart';
+import 'package:store_app/features/vendas/presentation/views/venda_detail_page.dart';
 
 class VendaCardWidget extends StatelessWidget {
   final VendaEntity venda;

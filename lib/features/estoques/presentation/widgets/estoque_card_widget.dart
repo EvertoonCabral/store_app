@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:store_app/features/estoques/data/model/estoque_entity.dart';
-import 'package:store_app/features/estoques/presentation/view/estoque_detail_page.dart';
+import 'package:store_app/features/estoques/presentation/views/estoque_detail_page.dart';
 
 class EstoqueCardWidget extends StatelessWidget {
   final EstoqueEntity estoque;

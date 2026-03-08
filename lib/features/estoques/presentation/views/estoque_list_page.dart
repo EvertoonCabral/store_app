@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:store_app/features/estoques/presentation/viewmodel/estoque_viewmodel.dart';
-import 'package:store_app/features/estoques/presentation/widgets/Estoque_add_bottom_sheet.dart';
+import 'package:store_app/features/estoques/presentation/widgets/estoque_add_bottom_sheet.dart';
 import 'package:store_app/features/estoques/presentation/widgets/estoque_card_widget.dart';
 import 'package:store_app/core/widgets/loading_view.dart';
 import 'package:store_app/core/widgets/error_view.dart';
