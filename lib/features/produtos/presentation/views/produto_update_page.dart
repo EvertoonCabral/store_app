@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:store_app/features/produtos/data/models/produto_entity.dart';
+import 'package:store_app/features/produtos/presentation/viewmodel/produto_list_viewmodel.dart';
 
 class ProdutoUpdatePage extends StatefulWidget {
   final ProdutoEntity produto;
@@ -47,22 +49,34 @@ class _ProdutoUpdatePageState extends State<ProdutoUpdatePage> {
     super.dispose();
   }
 
-  void _atualizarProduto() {
-    if (_formKey.currentState!.validate()) {
-      final produtoAtualizado = widget.produto.copyWith(
-        nome: _nomeController.text,
-        marca: _marcaController.text,
-        precoCompra: double.parse(_precoCompraController.text),
-        precoVenda: double.parse(_precoVendaController.text),
-        descricao: _descricaoController.text.isEmpty
-            ? null
-            : _descricaoController.text,
-        isAtivo: _isAtivo,
-        estoqueId: int.parse(_estoqueIdController.text),
-      );
+  Future<void> _atualizarProduto() async {
+    if (!_formKey.currentState!.validate()) return;
 
-      // Retorna o produto atualizado ou chama o repositório/service
-      Navigator.pop(context, produtoAtualizado);
+    final produtoAtualizado = widget.produto.copyWith(
+      nome: _nomeController.text,
+      marca: _marcaController.text,
+      precoCompra: double.parse(_precoCompraController.text),
+      precoVenda: double.parse(_precoVendaController.text),
+      descricao:
+          _descricaoController.text.isEmpty ? null : _descricaoController.text,
+      isAtivo: _isAtivo,
+      estoqueId: int.parse(_estoqueIdController.text),
+    );
+
+    final vm = context.read<ProdutoListViewmodel>();
+    final ok = await vm.atualizarProduto(widget.produto.id!, produtoAtualizado);
+
+    if (!mounted) return;
+
+    if (ok) {
+      Navigator.pop(context, true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(vm.error ?? 'Erro ao atualizar produto'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 

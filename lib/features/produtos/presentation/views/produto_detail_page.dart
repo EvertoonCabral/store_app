@@ -53,8 +53,9 @@ class _ProdutoDetailPageState extends State<ProdutoDetailPage> {
             return const EmptyView(message: 'Produto não encontrado');
           }
 
-          final dataFormatada =
-              DateFormat('dd/MM/yyyy').format(produto.dataCadastro);
+          final dataFormatada = produto.dataCadastro != null
+              ? DateFormat('dd/MM/yyyy').format(produto.dataCadastro!)
+              : 'Não informado';
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),

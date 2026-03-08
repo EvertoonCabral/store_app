@@ -12,7 +12,7 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
   @override
   Future<bool> postProdutos(ProdutoEntity request) async {
     try {
-      await api.createProduto(request.toMap());
+      await api.createProduto(request.toWriteMap());
       return true;
     } catch (e) {
       return false;
@@ -22,7 +22,7 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
   @override
   Future<bool> updateProduto(int id, ProdutoEntity request) async {
     try {
-      await api.updateProduto(id, request.toMap());
+      await api.updateProduto(id, request.toUpdateMap());
       return true;
     } catch (e) {
       return false;

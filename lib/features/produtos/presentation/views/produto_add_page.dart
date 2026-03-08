@@ -40,7 +40,6 @@ class _ProdutoAddPageState extends State<ProdutoAddPage> {
       marca: _marcaController.text,
       precoCompra: double.parse(_precoCompraController.text),
       precoVenda: double.parse(_precoVendaController.text),
-      dataCadastro: DateTime.now(),
       descricao:
           _descricaoController.text.isEmpty ? null : _descricaoController.text,
       isAtivo: _isAtivo,
@@ -49,14 +48,17 @@ class _ProdutoAddPageState extends State<ProdutoAddPage> {
 
     final vm = context.read<ProdutoListViewmodel>();
 
-    try {
-      await vm.cadastrarProduto(produto);
+    final ok = await vm.cadastrarProduto(produto);
+    if (!mounted) return;
 
-      if (!mounted) return;
+    if (ok) {
       Navigator.pop(context, true);
-    } catch (_) {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Erro ao cadastrar produto')),
+        SnackBar(
+          content: Text(vm.error ?? 'Erro ao cadastrar produto'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }

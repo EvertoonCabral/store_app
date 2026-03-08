@@ -6,9 +6,10 @@ class ProdutoEntity {
   final String marca;
   final double precoCompra;
   final double precoVenda;
+  final int quantidadeEstoque;
   final String? descricao;
   final bool isAtivo;
-  final DateTime dataCadastro;
+  final DateTime? dataCadastro;
   final int estoqueId;
 
   const ProdutoEntity({
@@ -17,9 +18,10 @@ class ProdutoEntity {
     required this.marca,
     required this.precoCompra,
     required this.precoVenda,
+    this.quantidadeEstoque = 0,
     required this.descricao,
     required this.isAtivo,
-    required this.dataCadastro,
+    this.dataCadastro,
     required this.estoqueId,
   });
 
@@ -29,6 +31,7 @@ class ProdutoEntity {
     String? marca,
     double? precoCompra,
     double? precoVenda,
+    int? quantidadeEstoque,
     String? descricao,
     bool? isAtivo,
     DateTime? dataCadastro,
@@ -40,6 +43,7 @@ class ProdutoEntity {
       marca: marca ?? this.marca,
       precoCompra: precoCompra ?? this.precoCompra,
       precoVenda: precoVenda ?? this.precoVenda,
+      quantidadeEstoque: quantidadeEstoque ?? this.quantidadeEstoque,
       descricao: descricao ?? this.descricao,
       isAtivo: isAtivo ?? this.isAtivo,
       dataCadastro: dataCadastro ?? this.dataCadastro,
@@ -54,24 +58,72 @@ class ProdutoEntity {
       'marca': marca,
       'precoCompra': precoCompra,
       'precoVenda': precoVenda,
+      'quantidadeEstoque': quantidadeEstoque,
       'descricao': descricao,
       'isAtivo': isAtivo,
-      'dataCadastro': dataCadastro.toIso8601String(),
+      'estoqueId': estoqueId,
+    };
+  }
+
+  Map<String, dynamic> toWriteMap() {
+    return <String, dynamic>{
+      'nome': nome,
+      'marca': marca,
+      'precoCompra': precoCompra,
+      'precoVenda': precoVenda,
+      'quantidadeEstoque': quantidadeEstoque,
+      'descricao': descricao,
+      'isAtivo': isAtivo,
+      'estoqueId': estoqueId,
+    };
+  }
+
+  Map<String, dynamic> toUpdateMap() {
+    return <String, dynamic>{
+      'id': id,
+      'nome': nome,
+      'marca': marca,
+      'precoCompra': precoCompra,
+      'precoVenda': precoVenda,
+      'quantidadeEstoque': quantidadeEstoque,
+      'descricao': descricao,
+      'isAtivo': isAtivo,
       'estoqueId': estoqueId,
     };
   }
 
   factory ProdutoEntity.fromMap(Map<String, dynamic> map) {
+    final rawDataCadastro = map['dataCadastro'];
+    final dataCadastro = rawDataCadastro is String && rawDataCadastro.isNotEmpty
+        ? DateTime.parse(rawDataCadastro)
+        : null;
+
+    final rawPrecoCompra = map['precoCompra'];
+    final precoCompra = rawPrecoCompra is num
+        ? rawPrecoCompra.toDouble()
+        : double.tryParse('$rawPrecoCompra') ?? 0;
+
+    final rawPrecoVenda = map['precoVenda'];
+    final precoVenda = rawPrecoVenda is num
+        ? rawPrecoVenda.toDouble()
+        : double.tryParse('$rawPrecoVenda') ?? 0;
+
+    final rawQuantidadeEstoque = map['quantidadeEstoque'];
+    final quantidadeEstoque = rawQuantidadeEstoque is num
+        ? rawQuantidadeEstoque.toInt()
+        : int.tryParse('$rawQuantidadeEstoque') ?? 0;
+
     return ProdutoEntity(
-      id: map['id'] as int,
-      nome: map['nome'] as String,
-      marca: map['marca'] as String,
-      precoCompra: (map['precoCompra'] as num).toDouble(),
-      precoVenda: (map['precoVenda'] as num).toDouble(),
+      id: map['id'] as int?,
+      nome: (map['nome'] as String?) ?? '',
+      marca: (map['marca'] as String?) ?? '',
+      precoCompra: precoCompra,
+      precoVenda: precoVenda,
+      quantidadeEstoque: quantidadeEstoque,
       descricao: map['descricao'] as String?,
-      isAtivo: map['isAtivo'] as bool,
-      dataCadastro: DateTime.parse(map['dataCadastro'] as String),
-      estoqueId: map['estoqueId'] as int,
+      isAtivo: (map['isAtivo'] as bool?) ?? true,
+      dataCadastro: dataCadastro,
+      estoqueId: (map['estoqueId'] as int?) ?? 0,
     );
   }
 
@@ -81,7 +133,7 @@ class ProdutoEntity {
       ProdutoEntity.fromMap(json);
   @override
   String toString() {
-    return 'ProdutoEntity(id: $id, nome: $nome, marca: $marca, precoCompra: $precoCompra, precoVenda: $precoVenda, descricao: $descricao, isAtivo: $isAtivo, dataCadastro: $dataCadastro, estoqueId: $estoqueId)';
+    return 'ProdutoEntity(id: $id, nome: $nome, marca: $marca, precoCompra: $precoCompra, precoVenda: $precoVenda, quantidadeEstoque: $quantidadeEstoque, descricao: $descricao, isAtivo: $isAtivo, dataCadastro: $dataCadastro, estoqueId: $estoqueId)';
   }
 
   @override
@@ -93,6 +145,7 @@ class ProdutoEntity {
         other.marca == marca &&
         other.precoCompra == precoCompra &&
         other.precoVenda == precoVenda &&
+        other.quantidadeEstoque == quantidadeEstoque &&
         other.descricao == descricao &&
         other.isAtivo == isAtivo &&
         other.dataCadastro == dataCadastro &&
@@ -106,6 +159,7 @@ class ProdutoEntity {
         marca.hashCode ^
         precoCompra.hashCode ^
         precoVenda.hashCode ^
+        quantidadeEstoque.hashCode ^
         descricao.hashCode ^
         isAtivo.hashCode ^
         dataCadastro.hashCode ^

@@ -12,16 +12,40 @@ class ProdutoListViewmodel extends ChangeNotifier {
   List<ProdutoEntity> items = [];
   ProdutoEntity? produtoSelecionado;
 
-  Future<void> cadastrarProduto(ProdutoEntity produto) async {
+  Future<bool> cadastrarProduto(ProdutoEntity produto) async {
     try {
       isLoading = true;
       error = null;
       notifyListeners();
 
-      await repository.postProdutos(produto);
+      final ok = await repository.postProdutos(produto);
+      if (!ok) {
+        error = 'Erro ao cadastrar produto';
+      }
+      return ok;
     } catch (e) {
       error = 'Erro ao cadastrar produto';
-      rethrow;
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> atualizarProduto(int id, ProdutoEntity produto) async {
+    try {
+      isLoading = true;
+      error = null;
+      notifyListeners();
+
+      final ok = await repository.updateProduto(id, produto);
+      if (!ok) {
+        error = 'Erro ao atualizar produto';
+      }
+      return ok;
+    } catch (e) {
+      error = 'Erro ao atualizar produto';
+      return false;
     } finally {
       isLoading = false;
       notifyListeners();
@@ -77,7 +101,6 @@ class ProdutoListViewmodel extends ChangeNotifier {
         precoVenda: 0,
         descricao: null,
         isAtivo: true,
-        dataCadastro: DateTime.now(),
         estoqueId: 0,
       ),
     );

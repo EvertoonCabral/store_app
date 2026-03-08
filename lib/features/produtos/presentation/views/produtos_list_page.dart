@@ -62,11 +62,22 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
                   arguments: produtoItem,
                 );
 
-                if (resultado != null) {
-                  if (mounted) {
-                    // ignore: use_build_context_synchronously
-                    context.read<ProdutoListViewmodel>().retornaProdutos();
-                  }
+                if (!mounted) return;
+
+                if (resultado == true) {
+                  final messenger = ScaffoldMessenger.of(context);
+                  final vm = context.read<ProdutoListViewmodel>();
+
+                  await vm.retornaProdutos();
+                  if (!mounted) return;
+
+                  messenger.showSnackBar(
+                    const SnackBar(
+                      content: Text('Produto atualizado com sucesso!'),
+                      backgroundColor: Colors.green,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
                 }
               },
               onDelete: () async {
@@ -88,7 +99,7 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
                             ? '${produtoItem.nome} excluído'
                             : vm.error ?? 'Erro ao excluir produto',
                       ),
-                      backgroundColor: ok ? null : Colors.red,
+                      backgroundColor: ok ? Colors.green : Colors.red,
                     ),
                   );
                 }

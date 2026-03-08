@@ -7,7 +7,7 @@ class ProdutoApiServices {
   ProdutoApiServices(this.client);
 
   Future<List<ProdutoEntity>> getAllProdutos() async {
-    final result = await client.get('api/Produto');
+    final result = await client.get('api/produto');
     final data = client.decode(result);
     final list = data as List<dynamic>;
     return list
@@ -16,30 +16,29 @@ class ProdutoApiServices {
   }
 
   Future<ProdutoEntity> getProdutoById(int? id) async {
-    final result = await client.get('api/Produto/$id');
+    final result = await client.get('api/produto/$id');
     final data = client.decode(result) as Map<String, dynamic>;
     return ProdutoEntity.fromMap(data);
   }
 
-  Future<ProdutoEntity> createProduto(Map<String, dynamic> produtoData) async {
-    final result = await client.post('api/Produto', body: produtoData);
-    final data = client.decode(result) as Map<String, dynamic>;
-    return ProdutoEntity.fromMap(data);
+  Future<void> createProduto(Map<String, dynamic> produtoData) async {
+    final body = Map<String, dynamic>.from(produtoData)
+      ..remove('id')
+      ..remove('dataCadastro');
+    await client.post('api/produto', body: body);
   }
 
   Future<bool> deleteProduto(int id) async {
     try {
-      await client.delete('api/Produto/$id');
+      await client.delete('api/produto/$id');
       return true;
     } catch (e) {
       return false;
     }
   }
 
-  Future<ProdutoEntity> updateProduto(
-      int id, Map<String, dynamic> produtoData) async {
-    final result = await client.put('api/Produto/$id', body: produtoData);
-    final data = client.decode(result) as Map<String, dynamic>;
-    return ProdutoEntity.fromMap(data);
+  Future<void> updateProduto(int id, Map<String, dynamic> produtoData) async {
+    final body = Map<String, dynamic>.from(produtoData)..remove('dataCadastro');
+    await client.put('api/produto/$id', body: body);
   }
 }
