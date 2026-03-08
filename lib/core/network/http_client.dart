@@ -92,6 +92,24 @@ class HttpClient {
     return result;
   }
 
+  Future<http.Response> patch(
+    String path, {
+    Map<String, dynamic>? body,
+    Map<String, String>? headers,
+  }) async {
+    final result = await _client.patch(
+      _uri(path),
+      headers: _buildHeaders(headers),
+      body: body != null ? jsonEncode(body) : null,
+    );
+    _checkUnauthorized(result);
+    if (result.statusCode != 200 && result.statusCode != 204) {
+      throw Exception(
+          'PATCH $path falhou (${result.statusCode}): ${result.body}');
+    }
+    return result;
+  }
+
   Future<http.Response> delete(
     String path, {
     Map<String, String>? headers,

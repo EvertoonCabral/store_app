@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:store_app/features/clientes/data/models/cliente_entity.dart';
+import 'package:store_app/features/clientes/data/models/cliente_request_model.dart';
+import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
 
 class ClientesUpdatePage extends StatefulWidget {
-  const ClientesUpdatePage({super.key});
+  final ClienteDto cliente;
+
+  const ClientesUpdatePage({super.key, required this.cliente});
 
   @override
   State<ClientesUpdatePage> createState() => _ClientesUpdatePageState();
@@ -11,10 +17,19 @@ class ClientesUpdatePage extends StatefulWidget {
 
 class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
   final _formKey = GlobalKey<FormState>();
-  final _nomeController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _cpfCnpjController = TextEditingController();
-  final _telefoneController = TextEditingController();
+  late final TextEditingController _nomeController;
+  late final TextEditingController _emailController;
+  late final TextEditingController _cpfCnpjController;
+  late final TextEditingController _telefoneController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nomeController = TextEditingController(text: widget.cliente.nome);
+    _emailController = TextEditingController(text: widget.cliente.email ?? '');
+    _cpfCnpjController = TextEditingController(text: widget.cliente.cpf ?? '');
+    _telefoneController = TextEditingController(text: widget.cliente.telefone);
+  }
 
   @override
   void dispose() {
@@ -25,8 +40,49 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
     super.dispose();
   }
 
+  Future<void> _onSubmit() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final request = ClienteRequestModel(
+      nome: _nomeController.text.trim(),
+      email: _emailController.text.trim().isNotEmpty
+          ? _emailController.text.trim()
+          : null,
+      cpf: _cpfCnpjController.text.trim().isNotEmpty
+          ? _cpfCnpjController.text.trim()
+          : null,
+      telefone: _telefoneController.text.trim(),
+      isAtivo: widget.cliente.isAtivo,
+    );
+
+    final vm = context.read<ClienteListViewModel>();
+    final ok = await vm.atualizarCliente(widget.cliente.id, request);
+
+    if (!mounted) return;
+
+    if (ok) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Cliente atualizado com sucesso!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(vm.error ?? 'Erro ao atualizar cliente'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isSubmitting =
+        context.select<ClienteListViewModel, bool>((vm) => vm.isSubmitting);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Editar Cliente'),
@@ -44,7 +100,6 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
             children: [
               const SizedBox(height: 8),
 
-              // Nome
               TextFormField(
                 controller: _nomeController,
                 textCapitalization: TextCapitalization.words,
@@ -69,7 +124,7 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
                   ),
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || value.trim().isEmpty) {
                     return 'Por favor, informe o nome';
                   }
                   return null;
@@ -78,7 +133,6 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
 
               const SizedBox(height: 16),
 
-              // Email
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -104,9 +158,7 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
                 ),
                 validator: (value) {
                   if (value != null && value.isNotEmpty) {
-                    if (!value.contains('@')) {
-                      return 'E-mail inválido';
-                    }
+                    if (!value.contains('@')) return 'E-mail inválido';
                   }
                   return null;
                 },
@@ -114,7 +166,6 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
 
               const SizedBox(height: 16),
 
-              // CPF/CNPJ
               TextFormField(
                 controller: _cpfCnpjController,
                 keyboardType: TextInputType.number,
@@ -143,7 +194,6 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
 
               const SizedBox(height: 16),
 
-              // Telefone
               TextFormField(
                 controller: _telefoneController,
                 keyboardType: TextInputType.phone,
@@ -169,7 +219,7 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
                   ),
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || value.trim().isEmpty) {
                     return 'Por favor, informe o telefone';
                   }
                   return null;
@@ -178,16 +228,8 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
 
               const SizedBox(height: 32),
 
-              // Botão
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Processar cadastro
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Editando cliente...')),
-                    );
-                  }
-                },
+                onPressed: isSubmitting ? null : _onSubmit,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
                   foregroundColor: Colors.white,
@@ -197,14 +239,21 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
                   ),
                   elevation: 2,
                 ),
-                child: Text(
-                  'EDITAR',
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.5,
-                  ),
-                ),
+                child: isSubmitting
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                            color: Colors.white, strokeWidth: 2),
+                      )
+                    : Text(
+                        'SALVAR',
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
               ),
             ],
           ),

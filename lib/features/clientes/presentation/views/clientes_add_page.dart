@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:store_app/features/clientes/data/models/cliente_request_model.dart';
+import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
 
 class ClientesAddPage extends StatefulWidget {
   const ClientesAddPage({super.key});
@@ -25,8 +28,48 @@ class _ClientesAddPageState extends State<ClientesAddPage> {
     super.dispose();
   }
 
+  Future<void> _onSubmit() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final request = ClienteRequestModel(
+      nome: _nomeController.text.trim(),
+      email: _emailController.text.trim().isNotEmpty
+          ? _emailController.text.trim()
+          : null,
+      cpf: _cpfCnpjController.text.trim().isNotEmpty
+          ? _cpfCnpjController.text.trim()
+          : null,
+      telefone: _telefoneController.text.trim(),
+    );
+
+    final vm = context.read<ClienteListViewModel>();
+    final ok = await vm.cadastrarCliente(request);
+
+    if (!mounted) return;
+
+    if (ok) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Cliente cadastrado com sucesso!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(vm.error ?? 'Erro ao cadastrar cliente'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isSubmitting =
+        context.select<ClienteListViewModel, bool>((vm) => vm.isSubmitting);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cadastro de Cliente'),
@@ -44,7 +87,6 @@ class _ClientesAddPageState extends State<ClientesAddPage> {
             children: [
               const SizedBox(height: 8),
 
-              // Nome
               TextFormField(
                 controller: _nomeController,
                 textCapitalization: TextCapitalization.words,
@@ -69,7 +111,7 @@ class _ClientesAddPageState extends State<ClientesAddPage> {
                   ),
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || value.trim().isEmpty) {
                     return 'Por favor, informe o nome';
                   }
                   return null;
@@ -78,7 +120,6 @@ class _ClientesAddPageState extends State<ClientesAddPage> {
 
               const SizedBox(height: 16),
 
-              // Email
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -104,9 +145,7 @@ class _ClientesAddPageState extends State<ClientesAddPage> {
                 ),
                 validator: (value) {
                   if (value != null && value.isNotEmpty) {
-                    if (!value.contains('@')) {
-                      return 'E-mail inválido';
-                    }
+                    if (!value.contains('@')) return 'E-mail inválido';
                   }
                   return null;
                 },
@@ -114,7 +153,6 @@ class _ClientesAddPageState extends State<ClientesAddPage> {
 
               const SizedBox(height: 16),
 
-              // CPF/CNPJ
               TextFormField(
                 controller: _cpfCnpjController,
                 keyboardType: TextInputType.number,
@@ -143,7 +181,6 @@ class _ClientesAddPageState extends State<ClientesAddPage> {
 
               const SizedBox(height: 16),
 
-              // Telefone
               TextFormField(
                 controller: _telefoneController,
                 keyboardType: TextInputType.phone,
@@ -169,7 +206,7 @@ class _ClientesAddPageState extends State<ClientesAddPage> {
                   ),
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null || value.trim().isEmpty) {
                     return 'Por favor, informe o telefone';
                   }
                   return null;
@@ -178,16 +215,8 @@ class _ClientesAddPageState extends State<ClientesAddPage> {
 
               const SizedBox(height: 32),
 
-              // Botão
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Processar cadastro
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Cadastrando cliente...')),
-                    );
-                  }
-                },
+                onPressed: isSubmitting ? null : _onSubmit,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
                   foregroundColor: Colors.white,
@@ -197,14 +226,21 @@ class _ClientesAddPageState extends State<ClientesAddPage> {
                   ),
                   elevation: 2,
                 ),
-                child: Text(
-                  'CADASTRAR',
-                  style: GoogleFonts.inter(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0.5,
-                  ),
-                ),
+                child: isSubmitting
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                            color: Colors.white, strokeWidth: 2),
+                      )
+                    : Text(
+                        'CADASTRAR',
+                        style: GoogleFonts.inter(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
               ),
             ],
           ),
@@ -213,3 +249,4 @@ class _ClientesAddPageState extends State<ClientesAddPage> {
     );
   }
 }
+

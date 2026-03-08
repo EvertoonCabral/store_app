@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:store_app/core/widgets/auth_guard.dart';
+import 'package:store_app/features/clientes/data/models/cliente_entity.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_add_page.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_list_page.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_update_page.dart';
@@ -33,7 +34,6 @@ class AppRoutes {
     cadastrarProduto: (_) => const AuthGuard(child: ProdutoAddPage()),
     clientes: (_) => const AuthGuard(child: ClientesListPage()),
     cadastrarCliente: (_) => const AuthGuard(child: ClientesAddPage()),
-    editarCliente: (_) => const AuthGuard(child: ClientesUpdatePage()),
     estoques: (_) => const AuthGuard(child: EstoqueListPage()),
     vendas: (_) => const AuthGuard(child: VendasListPage()),
     cadastrarVenda: (_) => const AuthGuard(child: VendaCadastroPage()),
@@ -46,6 +46,14 @@ class AppRoutes {
         builder: (_) => AuthGuard(child: ProdutoUpdatePage(produto: produto)),
       );
     }
+    if (settings.name == editarCliente) {
+      final cliente = settings.arguments as ClienteDto;
+      return MaterialPageRoute(
+        builder: (_) =>
+            AuthGuard(child: ClientesUpdatePage(cliente: cliente)),
+      );
+    }
     return null;
   }
 }
+
