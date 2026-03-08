@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:store_app/core/config/app_routes.dart';
 import 'package:store_app/features/produtos/presentation/viewmodel/produto_list_viewmodel.dart';
 import 'package:store_app/features/produtos/presentation/widgets/produto_card_widget.dart';
+import 'package:store_app/core/utils/show_confirm_dialog.dart';
 import 'package:store_app/core/widgets/loading_view.dart';
 import 'package:store_app/core/widgets/error_view.dart';
 import 'package:store_app/core/widgets/empty_view.dart';
@@ -68,36 +69,21 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
                   }
                 }
               },
-              onDelete: () {
-                showDialog(
-                  context: context,
-                  builder: (dialogContext) => AlertDialog(
-                    title: const Text('Confirmar exclusão'),
-                    content:
-                        Text('Deseja realmente excluir "${produtoItem.nome}"?'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(dialogContext),
-                        child: const Text('Cancelar'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(dialogContext);
-                          // Aqui você chama o método de deletar do viewmodel
-                          // context.read<ProdutoListViewmodel>().deletarProduto(p.id);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Text('${produtoItem.nome} excluído')),
-                          );
-                        },
-                        child: const Text(
-                          'Excluir',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ),
-                    ],
-                  ),
+              onDelete: () async {
+                final messenger = ScaffoldMessenger.of(context);
+                final confirmed = await showConfirmDialog(
+                  context,
+                  title: 'Confirmar excluão',
+                  content: 'Deseja realmente excluir "${produtoItem.nome}"?',
+                  confirmLabel: 'Excluir',
+                  icon: Icons.delete_outline,
                 );
+                if (confirmed) {
+                  // context.read<ProdutoListViewmodel>().deletarProduto(produtoItem.id);
+                  messenger.showSnackBar(
+                    SnackBar(content: Text('${produtoItem.nome} excluído')),
+                  );
+                }
               },
             );
           },
@@ -105,21 +91,21 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
       }),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          final messenger = ScaffoldMessenger.of(context);
+          final vm = context.read<ProdutoListViewmodel>();
           final result = await Navigator.pushNamed(
             context,
             AppRoutes.cadastrarProduto,
           );
-          if (result == true) {
-            if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Produto cadastrado com sucesso!'),
-                  backgroundColor: Colors.green,
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-              context.read<ProdutoListViewmodel>().retornaProdutos();
-            }
+          if (result == true && mounted) {
+            messenger.showSnackBar(
+              const SnackBar(
+                content: Text('Produto cadastrado com sucesso!'),
+                backgroundColor: Colors.green,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+            vm.retornaProdutos();
           }
         },
         child: const Icon(Icons.add),

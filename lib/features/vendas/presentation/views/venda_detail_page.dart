@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:store_app/core/utils/show_confirm_dialog.dart';
 import 'package:store_app/features/clientes/data/models/cliente_entity.dart';
 import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
 import 'package:store_app/features/vendas/data/model/status_venda.dart';
@@ -106,7 +107,7 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
     }
   }
 
-  void _finalizarVenda() {
+  Future<void> _finalizarVenda() async {
     if (_venda == null) return;
 
     if (_venda!.status == StatusVenda.finalizada) {
@@ -123,44 +124,28 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
       return;
     }
 
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: const Text('Finalizar Venda'),
-        content: Text(
-          'Deseja realmente finalizar a venda #${_venda!.id}?\n\n'
-          'Valor Total: R\$ ${_totalVenda.toStringAsFixed(2)}', // Ô£à AJUSTADO
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(dialogContext);
-              // Aqui voc├¬ chama o m├®todo de finalizar do viewmodel
-              // context.read<VendasListViewmodel>().finalizarVenda(_venda!.id);
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Venda #${_venda!.id} finalizada com sucesso!'),
-                  backgroundColor: Colors.green,
-                ),
-              );
-
-              // Volta para a lista
-              Navigator.pop(context, true);
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              foregroundColor: Colors.white,
-            ),
-            child: const Text('Finalizar'),
-          ),
-        ],
-      ),
+    final confirmed = await showConfirmDialog(
+      context,
+      title: 'Finalizar Venda',
+      content: 'Deseja realmente finalizar a venda #${_venda!.id}?\n\n'
+          'Valor Total: R\$ ${_totalVenda.toStringAsFixed(2)}',
+      confirmLabel: 'Finalizar',
+      confirmColor: Colors.green,
+      icon: Icons.check_circle_outline,
     );
+
+    if (confirmed && mounted) {
+      // context.read<VendasListViewmodel>().finalizarVenda(_venda!.id);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Venda #${_venda!.id} finalizada com sucesso!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      Navigator.pop(context, true);
+    }
   }
 
   @override

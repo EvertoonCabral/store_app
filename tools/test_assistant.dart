@@ -90,10 +90,12 @@ Future<void> generateNewTest(String sourceFile, String testFile) async {
 
 String detectFileType(String sourceCode) {
   if (sourceCode.contains('extends Equatable')) return 'entity';
-  if (sourceCode.contains('class') && sourceCode.contains('ViewModel'))
+  if (sourceCode.contains('class') && sourceCode.contains('ViewModel')) {
     return 'viewmodel';
-  if (sourceCode.contains('class') && sourceCode.contains('StatefulWidget'))
+  }
+  if (sourceCode.contains('class') && sourceCode.contains('StatefulWidget')) {
     return 'widget';
+  }
   return 'unknown';
 }
 
@@ -235,7 +237,7 @@ $testOutput
 Instruções:
 - Explique brevemente o motivo da falha.
 - Gere o código do teste corrigido.
-- Responda apenas com a explicação e o código Dart do teste completo, começando e terminando com \`\`\`dart.
+- Responda apenas com a explicação e o código Dart do teste completo, começando e terminando com ```dart.
 ''';
 
   final fixedTestCode = await callLLM(prompt);

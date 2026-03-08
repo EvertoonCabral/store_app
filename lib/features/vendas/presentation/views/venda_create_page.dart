@@ -1,6 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:store_app/core/utils/show_confirm_dialog.dart';
 import 'package:store_app/features/clientes/data/models/cliente_entity.dart';
 import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
 import 'package:store_app/features/estoques/data/model/estoque_entity.dart';
@@ -106,30 +107,19 @@ class _VendaCadastroPageState extends State<VendaCadastroPage> {
   Future<void> _finalizarVenda() async {
     final vm = context.read<VendaCadastroViewmodel>();
 
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirmar Venda'),
-        content: Text(
-          'Deseja cadastrar esta venda?\n\n'
+    final confirm = await showConfirmDialog(
+      context,
+      title: 'Confirmar Venda',
+      content: 'Deseja cadastrar esta venda?\n\n'
           'Cliente: ${vm.clienteSelecionado?.nome}\n'
           'Estoque: ${vm.estoqueSelecionado?.nome}\n'
           'Total: R\$ ${vm.valorTotal.toStringAsFixed(2)}',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
-          ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Confirmar'),
-          ),
-        ],
-      ),
+      confirmLabel: 'Confirmar',
+      confirmColor: Colors.green,
+      icon: Icons.check_circle_outline,
     );
 
-    if (confirm == true && mounted) {
+    if (confirm && mounted) {
       final sucesso = await vm.cadastrarVenda();
 
       if (mounted) {
@@ -170,30 +160,17 @@ class _VendaCadastroPageState extends State<VendaCadastroPage> {
           if (vm.itens.isNotEmpty)
             IconButton(
               icon: const Icon(Icons.delete_outline),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Limpar Venda'),
-                    content: const Text('Deseja limpar todos os dados?'),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text('Cancelar'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          vm.limpar();
-                          Navigator.pop(context);
-                        },
-                        child: const Text(
-                          'Limpar',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                      ),
-                    ],
-                  ),
+              onPressed: () async {
+                final confirmed = await showConfirmDialog(
+                  context,
+                  title: 'Limpar Venda',
+                  content: 'Deseja limpar todos os dados?',
+                  confirmLabel: 'Limpar',
+                  icon: Icons.delete_sweep_outlined,
                 );
+                if (confirmed && mounted) {
+                  vm.limpar();
+                }
               },
             ),
         ],
