@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:store_app/features/produtos/presentation/viewmodel/produto_detail_viewmodel.dart';
+import 'package:store_app/core/widgets/loading_view.dart';
+import 'package:store_app/core/widgets/error_view.dart';
+import 'package:store_app/core/widgets/empty_view.dart';
 
 class ProdutoDetailPage extends StatefulWidget {
   final int? produtoId;
@@ -35,31 +38,19 @@ class _ProdutoDetailPageState extends State<ProdutoDetailPage> {
       body: Builder(
         builder: (_) {
           if (vm.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const LoadingView();
           }
 
           if (vm.error != null) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(vm.error!, textAlign: TextAlign.center),
-                    const SizedBox(height: 12),
-                    ElevatedButton(
-                      onPressed: () => vm.carregarProduto(widget.produtoId),
-                      child: const Text('Tentar novamente'),
-                    ),
-                  ],
-                ),
-              ),
+            return ErrorView(
+              message: vm.error!,
+              onRetry: () => vm.carregarProduto(widget.produtoId),
             );
           }
 
           final produto = vm.produto;
           if (produto == null) {
-            return const Center(child: Text('Produto não encontrado'));
+            return const EmptyView(message: 'Produto não encontrado');
           }
 
           final dataFormatada =

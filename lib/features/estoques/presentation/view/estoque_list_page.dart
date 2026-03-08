@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:store_app/features/estoques/presentation/viewmodel/estoque_viewmodel.dart';
 import 'package:store_app/features/estoques/presentation/widgets/Estoque_add_bottom_sheet.dart';
 import 'package:store_app/features/estoques/presentation/widgets/estoque_card_widget.dart';
+import 'package:store_app/core/widgets/loading_view.dart';
+import 'package:store_app/core/widgets/error_view.dart';
+import 'package:store_app/core/widgets/empty_view.dart';
 
 class EstoqueListPage extends StatefulWidget {
   const EstoqueListPage({super.key});
@@ -59,31 +62,19 @@ class _EstoqueListPageState extends State<EstoqueListPage> {
       body: Builder(
         builder: (context) {
           if (vm.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return const LoadingView();
           }
 
           if (vm.error != null) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(vm.error!, textAlign: TextAlign.center),
-                    const SizedBox(height: 12),
-                    ElevatedButton(
-                      onPressed: vm.retornaEstoques,
-                      child: const Text('Tentar novamente'),
-                    ),
-                  ],
-                ),
-              ),
+            return ErrorView(
+              message: vm.error!,
+              onRetry: vm.retornaEstoques,
             );
           }
 
           final items = vm.items;
           if (items.isEmpty) {
-            return const Center(child: Text('Nenhum estoque encontrado.'));
+            return const EmptyView(message: 'Nenhum estoque encontrado.');
           }
 
           return RefreshIndicator(

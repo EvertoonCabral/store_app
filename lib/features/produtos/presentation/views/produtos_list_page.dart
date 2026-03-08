@@ -3,6 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:store_app/core/config/app_routes.dart';
 import 'package:store_app/features/produtos/presentation/viewmodel/produto_list_viewmodel.dart';
 import 'package:store_app/features/produtos/presentation/widgets/produto_card_widget.dart';
+import 'package:store_app/core/widgets/loading_view.dart';
+import 'package:store_app/core/widgets/error_view.dart';
+import 'package:store_app/core/widgets/empty_view.dart';
 
 class ProdutosListPage extends StatefulWidget {
   const ProdutosListPage({super.key});
@@ -36,18 +39,14 @@ class _ProdutoListPageState extends State<ProdutosListPage> {
       ),
       body: Builder(builder: (_) {
         if (vm.isLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const LoadingView();
         }
         if (vm.error != null) {
-          return Center(
-            child: Text(vm.error!),
-          );
+          return ErrorView(message: vm.error!);
         }
         final items = vm.items;
         if (items.isEmpty) {
-          return const Center(
-            child: Text('Nenhum produto encontrado'),
-          );
+          return const EmptyView(message: 'Nenhum produto encontrado');
         }
         return ListView.builder(
           itemCount: items.length,
