@@ -34,10 +34,11 @@ class ClienteCardWidget extends StatelessWidget {
               radius: 26,
               backgroundColor: theme.colorScheme.primary.withAlpha(30),
               child: Text(
-                _getAvatarText(cliente),
+                cliente.id.toString(),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
+                  fontSize: cliente.id.toString().length > 3 ? 11 : 14,
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.primary,
                 ),
@@ -67,6 +68,17 @@ class ClienteCardWidget extends StatelessWidget {
                       ),
                       StatusChipWidget(isAtivo: cliente.isAtivo),
                     ],
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  Text(
+                    'ID: ${cliente.id}',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey[700],
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
 
                   if (cliente.email != null && cliente.email!.isNotEmpty) ...[
@@ -109,16 +121,5 @@ class ClienteCardWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _getAvatarText(ClienteDto cliente) {
-    final parts = cliente.nome.trim().split(' ');
-    if (parts.length >= 2) {
-      return '${parts.first[0]}${parts.last[0]}'.toUpperCase();
-    }
-    if (parts.isNotEmpty) {
-      return parts.first[0].toUpperCase();
-    }
-    return cliente.id.toString();
   }
 }

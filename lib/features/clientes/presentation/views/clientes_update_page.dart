@@ -101,6 +101,31 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
               const SizedBox(height: 8),
 
               TextFormField(
+                initialValue: widget.cliente.id.toString(),
+                enabled: false,
+                decoration: InputDecoration(
+                  labelText: 'ID do Cliente',
+                  prefixIcon: const Icon(Icons.tag_outlined),
+                  filled: true,
+                  fillColor: Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey[300]!),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey[300]!),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.grey[300]!),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              TextFormField(
                 controller: _nomeController,
                 textCapitalization: TextCapitalization.words,
                 decoration: InputDecoration(
