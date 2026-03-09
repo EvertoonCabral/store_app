@@ -16,18 +16,18 @@ class CreateItemVendaRequest {
     return {
       'produtoId': produtoId,
       'quantidade': quantidade,
-      'nomeProduto': nomeProduto,
       'precoUnitario': precoUnitario,
-      'subTotal': subTotal
     };
   }
 
   factory CreateItemVendaRequest.fromMap(Map<String, dynamic> map) {
+    final rawSubtotal = map['subtotal'] ?? map['subTotal'];
     return CreateItemVendaRequest(
-        produtoId: (map['produtoId'] as num).toInt(),
-        quantidade: (map['quantidade'] as num).toInt(),
-        nomeProduto: (map['nomeProduto'] as String),
-        precoUnitario: (map['precoUnitario'] as num).toDouble(),
-        subTotal: (map['subtotal'] as num).toDouble());
+      produtoId: (map['produtoId'] as num?)?.toInt(),
+      quantidade: (map['quantidade'] as num).toInt(),
+      nomeProduto: map['nomeProduto'] as String?,
+      precoUnitario: (map['precoUnitario'] as num).toDouble(),
+      subTotal: rawSubtotal is num ? rawSubtotal.toDouble() : null,
+    );
   }
 }

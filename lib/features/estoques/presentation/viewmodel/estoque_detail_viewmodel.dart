@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:store_app/features/estoques/data/model/estoque_detail_entity.dart';
 import 'package:store_app/features/estoques/data/model/item_estoque_entity.dart';
+import 'package:store_app/features/estoques/data/model/movimentar_estoque_request.dart';
+import 'package:store_app/features/estoques/data/model/tipo_movimentacao.dart';
 import 'package:store_app/features/estoques/data/repositories/estoque_repository.dart';
 import 'package:store_app/features/produtos/data/repositories/produto_repository.dart';
 
@@ -11,6 +13,7 @@ class EstoqueDetailViewmodel extends ChangeNotifier {
   EstoqueDetailViewmodel(this.estoqueRepository, this.produtoRepository);
 
   bool isLoading = false;
+  bool isMoving = false;
   String? error;
   EstoqueDetailEntity? estoque;
   List<ItemEstoqueEntity> itens = [];
@@ -58,5 +61,45 @@ class EstoqueDetailViewmodel extends ChangeNotifier {
 
   String getNomeProduto(int produtoId) {
     return produtosNomes[produtoId] ?? 'Carregando...';
+  }
+
+  Future<bool> movimentarEstoque({
+    required int produtoId,
+    required int quantidade,
+    required TipoMovimentacao tipo,
+    String? observacoes,
+  }) async {
+    final estoqueAtual = estoque;
+    if (estoqueAtual == null) {
+      error = 'Estoque não carregado';
+      notifyListeners();
+      return false;
+    }
+
+    try {
+      isMoving = true;
+      error = null;
+      notifyListeners();
+
+      final request = MovimentarEstoqueRequest(
+        produtoId: produtoId,
+        estoqueId: estoqueAtual.id,
+        quantidade: quantidade,
+        tipo: tipo,
+        observacoes: observacoes,
+        usuarioResponsavel: 'ADMIN',
+      );
+
+      await estoqueRepository.movimentarEstoque(request);
+      await carregarDetalhes(estoqueAtual.id);
+      return true;
+    } catch (_) {
+      error = 'Erro ao movimentar estoque';
+      notifyListeners();
+      return false;
+    } finally {
+      isMoving = false;
+      notifyListeners();
+    }
   }
 }

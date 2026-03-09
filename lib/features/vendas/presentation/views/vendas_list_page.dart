@@ -68,22 +68,25 @@ class _VendasListPageState extends State<VendasListPage> {
                   final vm = context.read<VendasListViewmodel>();
                   final confirmed = await showConfirmDialog(
                     context,
-                    title: 'Confirmar exclusão',
+                    title: 'Confirmar cancelamento',
                     content:
-                        'Deseja realmente excluir a venda #${vendaItem.id}?',
-                    confirmLabel: 'Excluir',
-                    icon: Icons.delete_outline,
+                        'Deseja realmente cancelar a venda #${vendaItem.id}?',
+                    confirmLabel: 'Cancelar venda',
+                    icon: Icons.cancel_outlined,
                   );
                   if (confirmed) {
-                    final ok = await vm.deletarVenda(vendaItem.id);
+                    final ok = await vm.cancelarVenda(
+                      vendaItem.id,
+                      motivo: 'Cancelada pelo usuário',
+                    );
                     messenger.showSnackBar(
                       SnackBar(
                         content: Text(
                           ok
-                              ? 'Venda #${vendaItem.id} excluída'
-                              : vm.error ?? 'Erro ao excluir venda',
+                              ? 'Venda #${vendaItem.id} cancelada'
+                              : vm.error ?? 'Erro ao cancelar venda',
                         ),
-                        backgroundColor: ok ? null : Colors.red,
+                        backgroundColor: ok ? Colors.green : Colors.red,
                       ),
                     );
                   }
@@ -100,8 +103,15 @@ class _VendasListPageState extends State<VendasListPage> {
             context,
             AppRoutes.cadastrarVenda,
           );
-          if (resultado != null && mounted) {
+          if (resultado == true && mounted) {
             vm.retornaVendas();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Venda cadastrada com sucesso!'),
+                backgroundColor: Colors.green,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
           }
         },
         child: const Icon(Icons.add),

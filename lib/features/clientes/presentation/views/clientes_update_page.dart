@@ -99,7 +99,6 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const SizedBox(height: 8),
-
               TextFormField(
                 initialValue: widget.cliente.id.toString(),
                 enabled: false,
@@ -122,9 +121,7 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 16),
-
               TextFormField(
                 controller: _nomeController,
                 textCapitalization: TextCapitalization.words,
@@ -155,9 +152,7 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
                   return null;
                 },
               ),
-
               const SizedBox(height: 16),
-
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -188,9 +183,7 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
                   return null;
                 },
               ),
-
               const SizedBox(height: 16),
-
               TextFormField(
                 controller: _cpfCnpjController,
                 keyboardType: TextInputType.number,
@@ -216,9 +209,7 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
                   ),
                 ),
               ),
-
               const SizedBox(height: 16),
-
               TextFormField(
                 controller: _telefoneController,
                 keyboardType: TextInputType.phone,
@@ -250,9 +241,7 @@ class _ClientesUpdatePageState extends State<ClientesUpdatePage> {
                   return null;
                 },
               ),
-
               const SizedBox(height: 32),
-
               ElevatedButton(
                 onPressed: isSubmitting ? null : _onSubmit,
                 style: ElevatedButton.styleFrom(

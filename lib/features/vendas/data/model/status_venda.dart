@@ -11,7 +11,11 @@ enum StatusVenda {
       throw ArgumentError('StatusVenda nulo');
     }
 
-    final s = linha.trim();
+    if (linha is int) {
+      return fromValue(linha);
+    }
+
+    final s = '$linha'.trim();
 
     final asInt = int.tryParse(s);
     if (asInt != null) {

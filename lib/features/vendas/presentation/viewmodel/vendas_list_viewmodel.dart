@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_app/features/vendas/data/model/finalizar_pagamento_request.dart';
 import 'package:store_app/features/vendas/data/model/venda_detail.dart';
 import 'package:store_app/features/vendas/data/model/venda_entity.dart';
 import 'package:store_app/features/vendas/data/repository/venda_repository.dart';
@@ -36,16 +37,33 @@ class VendasListViewmodel extends ChangeNotifier {
     }
   }
 
-  Future<bool> deletarVenda(int id) async {
+  Future<bool> cancelarVenda(int id, {required String motivo}) async {
     try {
-      final ok = await repository.deleteVenda(id);
-      if (ok) {
-        items.removeWhere((v) => v.id == id);
-        notifyListeners();
-      }
-      return ok;
+      await repository.cancelarVenda(id, motivo);
+      await retornaVendas();
+      return true;
     } catch (e) {
-      error = 'Erro ao excluir venda';
+      error = 'Erro ao cancelar venda';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> finalizarVenda(int id, double valorTotal) async {
+    try {
+      await repository.finalizarVenda(
+        id,
+        [
+          FinalizarPagamentoRequest(
+            valorPago: valorTotal,
+            formaPagamento: 'PIX',
+          ),
+        ],
+      );
+      await retornaVendas();
+      return true;
+    } catch (e) {
+      error = 'Erro ao finalizar venda';
       notifyListeners();
       return false;
     }

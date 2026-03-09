@@ -3,6 +3,7 @@ import 'package:store_app/features/estoques/data/model/estoque_create_dto.dart';
 import 'package:store_app/features/estoques/data/model/estoque_detail_entity.dart';
 import 'package:store_app/features/estoques/data/model/estoque_entity.dart';
 import 'package:store_app/features/estoques/data/model/item_estoque_entity.dart';
+import 'package:store_app/features/estoques/data/model/movimentar_estoque_request.dart';
 
 class EstoqueApiService {
   final HttpClient client;
@@ -29,12 +30,16 @@ class EstoqueApiService {
   }
 
   Future<List<ItemEstoqueEntity>> getItensEstoque(int estoqueId) async {
-    final result = await client
-        .get('api/Estoque/estoque/$estoqueId/ObterItensEstoque');
+    final result =
+        await client.get('api/Estoque/estoque/$estoqueId/ObterItensEstoque');
     final data = client.decode(result);
     final list = data as List<dynamic>;
     return list
         .map((json) => ItemEstoqueEntity.fromMap(json as Map<String, dynamic>))
         .toList();
+  }
+
+  Future<void> movimentarEstoque(MovimentarEstoqueRequest request) async {
+    await client.post('api/Estoque/MovimentarEstoque', body: request.toMap());
   }
 }

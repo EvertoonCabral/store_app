@@ -135,16 +135,28 @@ class _VendaDetailPageState extends State<VendaDetailPage> {
     );
 
     if (confirmed && mounted) {
-      // context.read<VendasListViewmodel>().finalizarVenda(_venda!.id);
+      final vm = context.read<VendasListViewmodel>();
+      final ok = await vm.finalizarVenda(_venda!.id, _totalVenda);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Venda #${_venda!.id} finalizada com sucesso!'),
-          backgroundColor: Colors.green,
-        ),
-      );
+      if (!mounted) return;
 
-      Navigator.pop(context, true);
+      if (ok) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Venda #${_venda!.id} finalizada com sucesso!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        await _carregarVenda();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(vm.error ?? 'Erro ao finalizar venda'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 

@@ -145,6 +145,7 @@ class VendaCadastroViewmodel extends ChangeNotifier {
         usuarioVendedor: 'ADMIN',
       );
 
+      await repository.validarEstoque(request);
       await repository.cadastrarVenda(request);
       limpar();
       return true;
