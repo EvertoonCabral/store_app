@@ -307,6 +307,14 @@ ChangeNotifierProvider(
 
 ## 7. Rede e Autenticação
 
+### Base URL (configuração)
+
+- A base URL da API é configurável via `--dart-define=BASE_URL=https://...`
+- `main.dart` lê com `const String.fromEnvironment('BASE_URL')` e passa para `configureDependencies()`
+- Se não definida, usa `_defaultBaseUrl` em `injection.dart` (URL de desenvolvimento)
+- **Para trocar de túnel ngrok em dev:** altere `_defaultBaseUrl` em `injection.dart`
+- **Para build de produção/distribuição:** use `flutter run --dart-define=BASE_URL=https://api-fixa.com/`
+
 ### HttpClient
 
 - Wrapper do `package:http` em `lib/core/network/http_client.dart`
@@ -319,9 +327,9 @@ ChangeNotifierProvider(
 
 - Holder in-memory do token JWT e dados do usuário logado
 - Ao receber o token (`setToken()`), decodifica automaticamente o payload JWT (base64url) e extrai:
-  - `nomeUsuario`
-  - `roleUsuario`
-  - `userId` —
+  - `nomeUsuario`;
+  - `roleUsuario`;
+  - `userId`.
 - `AuthViewModel` persiste/restaura o token via `FlutterSecureStorage`
 - Usado pelo `HttpClient` para headers e pelos ViewModels para identificar o usuário
 - Getter seguro: `nomeUsuario` retorna `'Desconhecido'` se o claim não existir no JWT

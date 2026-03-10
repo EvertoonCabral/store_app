@@ -23,7 +23,9 @@ final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
+
+  const baseUrl = String.fromEnvironment('BASE_URL');
+  configureDependencies(baseUrl: baseUrl.isNotEmpty ? baseUrl : null);
 
   // Quando a API retornar 401, força logout e redireciona para login.
   getIt<HttpClient>().onUnauthorized = () {

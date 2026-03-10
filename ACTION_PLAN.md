@@ -3,7 +3,7 @@
 > **Escopo:** App para ~20-30 usuários internos de uma loja de perfumes.  
 > Este documento lista os problemas atuais que impactam esse cenário,  
 > o plano de correção priorizado e as melhorias futuras de baixa prioridade.  
-> Última atualização: 09/03/2026 — Task 1.1 concluída
+> Última atualização: 09/03/2026 — Tasks 1.1, 1.2 e 1.3 concluídas (Fase 1 completa)
 
 ---
 
@@ -48,23 +48,25 @@ Todos os campos `usuarioVendedor` e `usuarioResponsavel` enviavam `'ADMIN'` fixo
 
 ---
 
-### 1.2 URL ngrok hardcoded
+### ~~1.2 URL ngrok hardcoded~~ ✅ Resolvido (09/03/2026)
 
-**Onde:** `lib/core/di/injection.dart`
+**Onde:** `lib/core/di/injection.dart`, `lib/main.dart`
 
 **Problema:**  
-A base URL da API é uma URL ngrok temporária. URLs ngrok mudam a cada reinício do túnel. Para 20-30 usuários, cada mudança exige gerar e distribuir um novo build.
+A base URL da API era uma URL ngrok temporária hardcoded. URLs ngrok mudam a cada reinício do túnel. Para 20-30 usuários, cada mudança exigia gerar e distribuir um novo build.
 
-**Impacto:** Alto — app para de funcionar toda vez que o túnel reinicia.
+**Impacto:** Alto — app parava de funcionar toda vez que o túnel reiniciava.
 
-**Solução proposta:**
+**Solução aplicada:**
 
-1. Usar `--dart-define=BASE_URL=https://...` no build
-2. Ler via `const String.fromEnvironment('BASE_URL', defaultValue: '...')`
-3. Para produção (mesmo que pequena): usar um domínio fixo ou IP estático
+1. `main.dart` lê `BASE_URL` via `const String.fromEnvironment('BASE_URL')`
+2. Passa para `configureDependencies(baseUrl: ...)` se definida
+3. `injection.dart` usa constante `_defaultBaseUrl` como fallback (fácil de alterar em dev)
+4. No build: `flutter run --dart-define=BASE_URL=https://minha-api.com/`
 
-**Arquivos afetados:**
+**Arquivos alterados:**
 
+- `lib/main.dart`
 - `lib/core/di/injection.dart`
 
 ---
@@ -233,7 +235,7 @@ Transformar em um **Dashboard** com:
 | #       | Tarefa                                                                             | Estimativa   | Prioridade   |
 | ------- | ---------------------------------------------------------------------------------- | ------------ | ------------ |
 | ~~1.1~~ | ~~Extrair dados do usuário logado (decodificar JWT) e eliminar "ADMIN" hardcoded~~ | ✅ Concluído | ✅ Resolvido |
-| 1.2     | Configurar base URL via `dart-define` ou variável de ambiente                      | ~30min       | 🔴 Crítico   |
+| ~~1.2~~ | ~~Configurar base URL via `dart-define` ou variável de ambiente~~                  | ✅ Concluído | ✅ Resolvido |
 | ~~1.3~~ | ~~Mover ViewModels de detalhe/criação para escopo local~~                          | ✅ Concluído | ✅ Resolvido |
 
 ### Fase 2 — Funcionalidades para uso real (Importantes)
@@ -359,9 +361,9 @@ class Failure<T> extends Result<T> { final String message; final int? code; cons
 
 ```
   ┌──────────────────────────────────────────────────────┐
-  │                  FASE 1 — Crítico                    │
-  │   ✅ Usuário logado │ URL fixa │ ✅ ViewModels locais │
-  │               restam ~30min (tarefa 1.2)             │
+  │              FASE 1 — Crítico ✅ COMPLETA             │
+  │  ✅ Usuário logado │ ✅ URL fixa │ ✅ ViewModels locais │
+  │              todas as tarefas concluídas              │
   ├──────────────────────────────────────────────────────┤
   │                FASE 2 — Importante                   │
   │  Pagamento │ Paginação │ N+1 fix │ Dashboard         │
@@ -404,3 +406,15 @@ class Failure<T> extends Result<T> { final String message; final int? code; cons
 | `VendaCadastroViewmodel` | `app_routes.dart` (na rota `cadastrarVenda`)        |
 
 **Arquivos alterados:** `main.dart`, `produto_card_widget.dart`, `estoque_card_widget.dart`, `app_routes.dart`.
+
+---
+
+### Tarefa 1.2 — Configurar base URL via dart-define
+
+**Problema:** URL ngrok hardcoded em `injection.dart`. Cada troca de túnel exigia novo build.
+
+**Solução:** `main.dart` lê `BASE_URL` via `String.fromEnvironment('BASE_URL')` e passa para `configureDependencies()`. `injection.dart` usa constante `_defaultBaseUrl` como fallback de desenvolvimento.
+
+**Uso:** `flutter run --dart-define=BASE_URL=https://minha-api.com/`
+
+**Arquivos alterados:** `main.dart`, `injection.dart`.

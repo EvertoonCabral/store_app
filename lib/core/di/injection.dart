@@ -26,6 +26,10 @@ import 'package:store_app/features/login/data/repositories/auth_repository_impl.
 
 final GetIt getIt = GetIt.instance;
 
+/// URL padrão usada quando nenhuma BASE_URL é fornecida via --dart-define.
+/// Altere aqui ao trocar de túnel ngrok durante o desenvolvimento.
+const _defaultBaseUrl = 'https://burghal-klara-nonextraneously.ngrok-free.dev/';
+
 void configureDependencies({String? baseUrl}) {
   if (getIt.isRegistered<HttpClient>()) return;
 
@@ -33,7 +37,7 @@ void configureDependencies({String? baseUrl}) {
   getIt.registerSingleton<TokenStore>(tokenStore);
 
   final httpClient = HttpClient(
-    baseUrl: baseUrl ?? 'https://burghal-klara-nonextraneously.ngrok-free.dev/',
+    baseUrl: baseUrl ?? _defaultBaseUrl,
     client: http.Client(),
     tokenStore: tokenStore,
   );
