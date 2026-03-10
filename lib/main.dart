@@ -10,11 +10,8 @@ import 'package:store_app/core/token_store.dart';
 import 'package:store_app/features/login/presentation/viewmodel/auth_viewmodel.dart';
 import 'package:store_app/features/clientes/presentation/viewmodel/cliente_list_viewmodel.dart';
 import 'package:store_app/features/produtos/presentation/viewmodel/produto_list_viewmodel.dart';
-import 'package:store_app/features/produtos/presentation/viewmodel/produto_detail_viewmodel.dart';
 import 'package:store_app/features/estoques/presentation/viewmodel/estoque_viewmodel.dart';
-import 'package:store_app/features/estoques/presentation/viewmodel/estoque_detail_viewmodel.dart';
 import 'package:store_app/features/vendas/presentation/viewmodel/vendas_list_viewmodel.dart';
-import 'package:store_app/features/vendas/presentation/viewmodel/cadastrar_venda_viewmodel.dart';
 
 import 'package:store_app/features/clientes/data/repositories/cliente_repository.dart';
 import 'package:store_app/features/produtos/data/repositories/produto_repository.dart';
@@ -59,30 +56,14 @@ void main() {
         ChangeNotifierProvider<ProdutoListViewmodel>(
           create: (_) => ProdutoListViewmodel(getIt<ProdutoRepository>()),
         ),
-        ChangeNotifierProvider<ProdutoDetailViewmodel>(
-          create: (_) => ProdutoDetailViewmodel(getIt<ProdutoRepository>()),
-        ),
         ChangeNotifierProvider<EstoqueViewmodel>(
           create: (_) => EstoqueViewmodel(
             getIt<EstoqueRepository>(),
             getIt<TokenStore>(),
           ),
         ),
-        ChangeNotifierProvider<EstoqueDetailViewmodel>(
-          create: (_) => EstoqueDetailViewmodel(
-            getIt<EstoqueRepository>(),
-            getIt<ProdutoRepository>(),
-            getIt<TokenStore>(),
-          ),
-        ),
         ChangeNotifierProvider<VendasListViewmodel>(
           create: (_) => VendasListViewmodel(getIt<VendaRepository>()),
-        ),
-        ChangeNotifierProvider<VendaCadastroViewmodel>(
-          create: (_) => VendaCadastroViewmodel(
-            getIt<VendaRepository>(),
-            getIt<TokenStore>(),
-          ),
         ),
       ],
       child: const PerfumeStoreApp(),

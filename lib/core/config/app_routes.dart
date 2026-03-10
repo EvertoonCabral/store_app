@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:store_app/core/di/injection.dart';
+import 'package:store_app/core/token_store.dart';
 import 'package:store_app/core/widgets/auth_guard.dart';
 import 'package:store_app/features/clientes/data/models/cliente_entity.dart';
 import 'package:store_app/features/clientes/presentation/views/clientes_add_page.dart';
@@ -10,6 +13,8 @@ import 'package:store_app/features/produtos/data/models/produto_entity.dart';
 import 'package:store_app/features/produtos/presentation/views/produto_add_page.dart';
 import 'package:store_app/features/produtos/presentation/views/produto_update_page.dart';
 import 'package:store_app/features/produtos/presentation/views/produtos_list_page.dart';
+import 'package:store_app/features/vendas/data/repository/venda_repository.dart';
+import 'package:store_app/features/vendas/presentation/viewmodel/cadastrar_venda_viewmodel.dart';
 import 'package:store_app/features/vendas/presentation/views/venda_create_page.dart';
 import 'package:store_app/features/vendas/presentation/views/vendas_list_page.dart';
 import '../../features/home/presentation/home_page.dart';
@@ -36,7 +41,15 @@ class AppRoutes {
     cadastrarCliente: (_) => const AuthGuard(child: ClientesAddPage()),
     estoques: (_) => const AuthGuard(child: EstoqueListPage()),
     vendas: (_) => const AuthGuard(child: VendasListPage()),
-    cadastrarVenda: (_) => const AuthGuard(child: VendaCadastroPage()),
+    cadastrarVenda: (_) => AuthGuard(
+          child: ChangeNotifierProvider(
+            create: (_) => VendaCadastroViewmodel(
+              getIt<VendaRepository>(),
+              getIt<TokenStore>(),
+            ),
+            child: const VendaCadastroPage(),
+          ),
+        ),
   };
 
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -49,11 +62,9 @@ class AppRoutes {
     if (settings.name == editarCliente) {
       final cliente = settings.arguments as ClienteDto;
       return MaterialPageRoute(
-        builder: (_) =>
-            AuthGuard(child: ClientesUpdatePage(cliente: cliente)),
+        builder: (_) => AuthGuard(child: ClientesUpdatePage(cliente: cliente)),
       );
     }
     return null;
   }
 }
-

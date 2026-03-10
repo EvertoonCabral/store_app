@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:store_app/core/di/injection.dart';
+import 'package:store_app/core/token_store.dart';
 import 'package:store_app/features/estoques/data/model/estoque_entity.dart';
+import 'package:store_app/features/estoques/data/repositories/estoque_repository.dart';
+import 'package:store_app/features/estoques/presentation/viewmodel/estoque_detail_viewmodel.dart';
 import 'package:store_app/features/estoques/presentation/views/estoque_detail_page.dart';
+import 'package:store_app/features/produtos/data/repositories/produto_repository.dart';
 
 class EstoqueCardWidget extends StatelessWidget {
   final EstoqueEntity estoque;
@@ -30,7 +36,14 @@ class EstoqueCardWidget extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => EstoqueDetailPage(estoqueId: estoque.id),
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) => EstoqueDetailViewmodel(
+                  getIt<EstoqueRepository>(),
+                  getIt<ProdutoRepository>(),
+                  getIt<TokenStore>(),
+                ),
+                child: EstoqueDetailPage(estoqueId: estoque.id),
+              ),
             ),
           );
         },

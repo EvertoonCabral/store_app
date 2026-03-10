@@ -69,7 +69,7 @@ A base URL da API é uma URL ngrok temporária. URLs ngrok mudam a cada reiníci
 
 ---
 
-### 1.3 ViewModels de detalhe/criação globais
+### 1.3 ViewModels de detalhe/criação globais ✅ Resolvido (09/03/2026)
 
 **Onde:** `main.dart` — MultiProvider raiz
 
@@ -234,7 +234,7 @@ Transformar em um **Dashboard** com:
 | ------- | ---------------------------------------------------------------------------------- | ------------ | ------------ |
 | ~~1.1~~ | ~~Extrair dados do usuário logado (decodificar JWT) e eliminar "ADMIN" hardcoded~~ | ✅ Concluído | ✅ Resolvido |
 | 1.2     | Configurar base URL via `dart-define` ou variável de ambiente                      | ~30min       | 🔴 Crítico   |
-| 1.3     | Mover ViewModels de detalhe/criação para escopo local                              | ~1-2h        | 🔴 Crítico   |
+| ~~1.3~~ | ~~Mover ViewModels de detalhe/criação para escopo local~~                          | ✅ Concluído | ✅ Resolvido |
 
 ### Fase 2 — Funcionalidades para uso real (Importantes)
 
@@ -360,8 +360,8 @@ class Failure<T> extends Result<T> { final String message; final int? code; cons
 ```
   ┌──────────────────────────────────────────────────────┐
   │                  FASE 1 — Crítico                    │
-  │   Usuário logado │ URL fixa │ ViewModels locais      │
-  │                    ~4-6h total                       │
+  │   ✅ Usuário logado │ URL fixa │ ✅ ViewModels locais │
+  │               restam ~30min (tarefa 1.2)             │
   ├──────────────────────────────────────────────────────┤
   │                FASE 2 — Importante                   │
   │  Pagamento │ Paginação │ N+1 fix │ Dashboard         │
@@ -376,3 +376,31 @@ class Failure<T> extends Result<T> { final String message; final int? code; cons
   │                indefinido                            │
   └──────────────────────────────────────────────────────┘
 ```
+
+---
+
+## Histórico de Implementações
+
+### Tarefa 1.1 — Extrair dados do usuário logado (JWT)
+
+**Problema:** String `'ADMIN'` hardcoded em `EstoqueViewmodel`, `EstoqueDetailViewmodel` e `VendaCadastroViewmodel`.
+
+**Solução:** `TokenStore` passou a decodificar o payload JWT automaticamente, expondo `nomeUsuario`, `roleUsuario` e `userId`. Os três ViewModels recebem `TokenStore` por injeção e leem o nome do usuário de lá.
+
+**Arquivos alterados:** `token_store.dart`, `estoque_viewmodel.dart`, `estoque_detail_viewmodel.dart`, `cadastrar_venda_viewmodel.dart`, `main.dart`.
+
+---
+
+### Tarefa 1.3 — Mover ViewModels de detalhe/criação para escopo local
+
+**Problema:** `ProdutoDetailViewmodel`, `EstoqueDetailViewmodel` e `VendaCadastroViewmodel` eram instanciados uma única vez no `MultiProvider` de `main.dart`, causando vazamento de estado entre navegações (dados de uma tela persistiam ao abrir outra).
+
+**Solução:** Cada ViewModel agora é criado localmente no ponto de navegação via `ChangeNotifierProvider`:
+
+| ViewModel                | Onde é criado                                       |
+| ------------------------ | --------------------------------------------------- |
+| `ProdutoDetailViewmodel` | `produto_card_widget.dart` (no `MaterialPageRoute`) |
+| `EstoqueDetailViewmodel` | `estoque_card_widget.dart` (no `MaterialPageRoute`) |
+| `VendaCadastroViewmodel` | `app_routes.dart` (na rota `cadastrarVenda`)        |
+
+**Arquivos alterados:** `main.dart`, `produto_card_widget.dart`, `estoque_card_widget.dart`, `app_routes.dart`.

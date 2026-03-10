@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:store_app/core/di/injection.dart';
 import 'package:store_app/core/widgets/status_chip_widget.dart';
 import 'package:store_app/features/produtos/data/models/produto_entity.dart';
+import 'package:store_app/features/produtos/data/repositories/produto_repository.dart';
+import 'package:store_app/features/produtos/presentation/viewmodel/produto_detail_viewmodel.dart';
 import 'package:store_app/features/produtos/presentation/views/produto_detail_page.dart';
 
 class ProdutoCardWidget extends StatelessWidget {
@@ -31,7 +35,11 @@ class ProdutoCardWidget extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => ProdutoDetailPage(produtoId: produto.id),
+              builder: (_) => ChangeNotifierProvider(
+                create: (_) =>
+                    ProdutoDetailViewmodel(getIt<ProdutoRepository>()),
+                child: ProdutoDetailPage(produtoId: produto.id),
+              ),
             ),
           );
         },

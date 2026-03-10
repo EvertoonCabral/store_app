@@ -301,7 +301,7 @@ ChangeNotifierProvider(
 )
 ```
 
-> **Status atual:** Alguns ViewModels de detalhe ainda estão globais. Serão migrados conforme o plano de ação.
+> **Status:** ✅ Todos os ViewModels de detalhe/criação já utilizam escopo local .
 
 ---
 
@@ -319,9 +319,9 @@ ChangeNotifierProvider(
 
 - Holder in-memory do token JWT e dados do usuário logado
 - Ao receber o token (`setToken()`), decodifica automaticamente o payload JWT (base64url) e extrai:
-  - `nomeUsuario` — claim `http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name`
-  - `roleUsuario` — claim `http://schemas.microsoft.com/ws/2008/06/identity/claims/role`
-  - `userId` — claim `http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier`
+  - `nomeUsuario`
+  - `roleUsuario`
+  - `userId` —
 - `AuthViewModel` persiste/restaura o token via `FlutterSecureStorage`
 - Usado pelo `HttpClient` para headers e pelos ViewModels para identificar o usuário
 - Getter seguro: `nomeUsuario` retorna `'Desconhecido'` se o claim não existir no JWT
