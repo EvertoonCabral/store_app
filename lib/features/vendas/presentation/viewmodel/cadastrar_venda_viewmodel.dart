@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_app/core/token_store.dart';
 import 'package:store_app/features/clientes/data/models/cliente_entity.dart';
 import 'package:store_app/features/estoques/data/model/estoque_entity.dart';
 import 'package:store_app/features/produtos/data/models/produto_entity.dart';
@@ -22,8 +23,9 @@ class ItemVendaTemp {
 
 class VendaCadastroViewmodel extends ChangeNotifier {
   final VendaRepository repository;
+  final TokenStore _tokenStore;
 
-  VendaCadastroViewmodel(this.repository);
+  VendaCadastroViewmodel(this.repository, this._tokenStore);
 
   bool isLoading = false;
   String? error;
@@ -142,7 +144,7 @@ class VendaCadastroViewmodel extends ChangeNotifier {
             .toList(),
         desconto: desconto,
         observacoes: observacoes,
-        usuarioVendedor: 'ADMIN',
+        usuarioVendedor: _tokenStore.nomeUsuario,
       );
 
       await repository.validarEstoque(request);

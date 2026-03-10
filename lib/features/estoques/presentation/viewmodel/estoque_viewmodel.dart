@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:store_app/core/token_store.dart';
 import 'package:store_app/features/estoques/data/model/estoque_create_dto.dart';
 import 'package:store_app/features/estoques/data/model/estoque_entity.dart';
 import 'package:store_app/features/estoques/data/repositories/estoque_repository.dart';
 
 class EstoqueViewmodel extends ChangeNotifier {
   final EstoqueRepository estoqueRepository;
+  final TokenStore _tokenStore;
 
-  EstoqueViewmodel(this.estoqueRepository);
+  EstoqueViewmodel(this.estoqueRepository, this._tokenStore);
 
   bool isLoading = false;
   String? error;
@@ -31,7 +33,7 @@ class EstoqueViewmodel extends ChangeNotifier {
     final request = EstoqueCreateDto(
       nome: nome.trim(),
       descricao: descricao.trim(),
-      usuarioResponsavel: 'ADMIN',
+      usuarioResponsavel: _tokenStore.nomeUsuario,
     );
 
     try {

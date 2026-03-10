@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:store_app/core/token_store.dart';
 import 'package:store_app/features/estoques/data/model/estoque_detail_entity.dart';
 import 'package:store_app/features/estoques/data/model/item_estoque_entity.dart';
 import 'package:store_app/features/estoques/data/model/movimentar_estoque_request.dart';
@@ -9,8 +10,10 @@ import 'package:store_app/features/produtos/data/repositories/produto_repository
 class EstoqueDetailViewmodel extends ChangeNotifier {
   final EstoqueRepository estoqueRepository;
   final ProdutoRepository produtoRepository;
+  final TokenStore _tokenStore;
 
-  EstoqueDetailViewmodel(this.estoqueRepository, this.produtoRepository);
+  EstoqueDetailViewmodel(
+      this.estoqueRepository, this.produtoRepository, this._tokenStore);
 
   bool isLoading = false;
   bool isMoving = false;
@@ -87,7 +90,7 @@ class EstoqueDetailViewmodel extends ChangeNotifier {
         quantidade: quantidade,
         tipo: tipo,
         observacoes: observacoes,
-        usuarioResponsavel: 'ADMIN',
+        usuarioResponsavel: _tokenStore.nomeUsuario,
       );
 
       await estoqueRepository.movimentarEstoque(request);

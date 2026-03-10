@@ -23,6 +23,8 @@ class AuthViewModel extends ChangeNotifier {
   String? get error => _error;
   String? get token => _token;
   bool get isAuthenticated => _token != null && _token!.isNotEmpty;
+  String get nomeUsuario => _tokenStore.nomeUsuario;
+  String? get roleUsuario => _tokenStore.roleUsuario;
 
   Future<void> _restoreToken() async {
     final saved = await _secureStorage.read(key: _kTokenKey);

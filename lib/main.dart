@@ -63,19 +63,26 @@ void main() {
           create: (_) => ProdutoDetailViewmodel(getIt<ProdutoRepository>()),
         ),
         ChangeNotifierProvider<EstoqueViewmodel>(
-          create: (_) => EstoqueViewmodel(getIt<EstoqueRepository>()),
+          create: (_) => EstoqueViewmodel(
+            getIt<EstoqueRepository>(),
+            getIt<TokenStore>(),
+          ),
         ),
         ChangeNotifierProvider<EstoqueDetailViewmodel>(
           create: (_) => EstoqueDetailViewmodel(
             getIt<EstoqueRepository>(),
             getIt<ProdutoRepository>(),
+            getIt<TokenStore>(),
           ),
         ),
         ChangeNotifierProvider<VendasListViewmodel>(
           create: (_) => VendasListViewmodel(getIt<VendaRepository>()),
         ),
         ChangeNotifierProvider<VendaCadastroViewmodel>(
-          create: (_) => VendaCadastroViewmodel(getIt<VendaRepository>()),
+          create: (_) => VendaCadastroViewmodel(
+            getIt<VendaRepository>(),
+            getIt<TokenStore>(),
+          ),
         ),
       ],
       child: const PerfumeStoreApp(),
